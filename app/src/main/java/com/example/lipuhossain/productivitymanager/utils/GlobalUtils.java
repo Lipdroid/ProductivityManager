@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import io.netopen.hotbitmapgg.library.view.RingProgressBar;
+
 /**
  * Created by lipuhossain on 10/1/16.
  */
@@ -86,5 +88,28 @@ public class GlobalUtils {
                 return "DECEMBER";
         }
         return "";
+    }
+
+    public static void showProgress(final RingProgressBar progress, final int value){
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                int jumpTime = 0;
+
+                while(jumpTime < value) {
+                    try {
+                        sleep(35);
+                        jumpTime += 1;
+                        progress.setProgress(jumpTime);
+                    }
+                    catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        t.start();
+
     }
 }

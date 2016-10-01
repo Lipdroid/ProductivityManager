@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
@@ -10,9 +10,8 @@
     <RelativeLayout
         android:id="@+id/rl_status"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="240dp"
         android:background="@color/colorPrimary">
-
 
         <ImageView
             android:id="@+id/img_history"
@@ -44,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/img_history"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="40dp"
             android:orientation="vertical">
 
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
@@ -63,11 +62,58 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Estimated"
                 android:layout_gravity="center"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:text="Target"
                 android:textColor="@color/common_white_1"
                 android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Treatment:"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7:52"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="16dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clock out:"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4:52 pm"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="16dp" />
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -77,7 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/img_history"
-            android:layout_marginRight="50dp"
+            android:layout_marginRight="40dp"
             android:orientation="vertical">
 
 
@@ -93,24 +139,81 @@
                 app:textColor="@color/common_white_1"
                 app:textIsShow="true"
                 app:textSize="30dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:text="Actual"
-                android:layout_gravity="center"
                 android:textColor="@color/common_white_1"
                 android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Treatment:"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7:52"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="16dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clock out:"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4:52 pm"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="16dp" />
+
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
 
     </RelativeLayout>
 
+    <ListView
+        android:id="@+id/schedule_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/date_pager">
+
+    </ListView>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/date_pager"
         android:layout_width="fill_parent"
         android:layout_height="69dp"
-        android:layout_below="@+id/rl_status"
         android:background="@color/common_white_1" />
 
-</RelativeLayout>
+
+</FrameLayout>

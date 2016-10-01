@@ -31,4 +31,5 @@
     <color name="main_gray_color">#9d9e9e</color>
     <color name="hint_color">#ababac</color>
     <color name="troubleshooting_txt_color">#231815</color>
+    <color name="orange">#EC522C</color>
 </resources>
