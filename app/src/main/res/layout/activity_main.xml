@@ -83,6 +83,7 @@
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/tv_target_treatment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="7:52"
@@ -106,6 +107,7 @@
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/tv_target_clock_out"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="4:52 pm"
@@ -123,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/img_history"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="30dp"
             android:orientation="vertical">
 
 
@@ -145,6 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
+                android:layout_marginRight="15dp"
                 android:text="Actual"
                 android:textColor="@color/common_white_1"
                 android:textSize="20dp" />
@@ -163,6 +166,7 @@
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/tv_actual_treatment_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="7:52"
@@ -186,6 +190,7 @@
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/tv_actual_out_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="4:52 pm"
