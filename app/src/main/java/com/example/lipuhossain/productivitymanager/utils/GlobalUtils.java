@@ -14,6 +14,8 @@ import com.example.lipuhossain.productivitymanager.interfaces.SCDialogCallback;
 import com.example.lipuhossain.productivitymanager.models.CustomDate;
 import com.example.lipuhossain.productivitymanager.models.Schedule;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +28,7 @@ import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class GlobalUtils {
 
-    public static String TARGET_PRODUCTIVITY = "88%";
+    public static String TARGET_PRODUCTIVITY = "88";
     public static String TOTAL_TREATMENT_TIME = "417";
     public static  boolean no_counting = true;
     public static String CLOCK_IN = "Clock In";
@@ -303,4 +305,86 @@ public class GlobalUtils {
         };
         t.start();
     }
+    //Calculate productivity
+    public static String get_productivity(String total_treatment_hours,String actual_treatment_hours){
+        int productivity = ((Integer.parseInt(total_treatment_hours)/Integer.parseInt(actual_treatment_hours))*100);
+        return productivity+"";
+    }
+
+    //Calculate how long have to stay in the office
+    public static String get_target_treatment_hours(String productivity,String total_treatment_hours){
+        int  actual_treatment_hours = ((Integer.parseInt(total_treatment_hours)/Integer.parseInt(productivity))*100);
+        return actual_treatment_hours+"";
+    }
+
+    //convert String into time
+    public static Date convert_string_time_into_original_time(String hhmmaa){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm aa");
+        Date convertedDate = new Date();
+        try {
+            convertedDate = dateFormat.parse(hhmmaa);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return convertedDate;
+    }
+
+    //convert minutes into hour and minute
+    public static String convert_minutes_to_hours(String minutess){
+        int hours = Integer.parseInt(minutess) / 60; //since both are ints, you get an int
+        int minutes = Integer.parseInt(minutess) % 60;
+        System.out.printf("%d:%02d", hours, minutes);
+        return hours+":"+minutes;
+    }
+
+
+    //1 minute = 60 seconds
+    //1 hour = 60 x 60 = 3600
+    //1 day = 3600 x 24 = 86400
+    public static void printDifference(Date startDate, Date endDate){
+
+        //milliseconds
+        long different = endDate.getTime() - startDate.getTime();
+
+        System.out.println("startDate : " + startDate);
+        System.out.println("endDate : "+ endDate);
+        System.out.println("different : " + different);
+
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        long elapsedDays = different / daysInMilli;
+        different = different % daysInMilli;
+
+        long elapsedHours = different / hoursInMilli;
+        different = different % hoursInMilli;
+
+        long elapsedMinutes = different / minutesInMilli;
+        different = different % minutesInMilli;
+
+        long elapsedSeconds = different / secondsInMilli;
+
+        System.out.printf(
+                "%d days, %d hours, %d minutes, %d seconds%n",
+                elapsedDays,
+                elapsedHours, elapsedMinutes, elapsedSeconds);
+
+    }
+
+    public static String add_hours_to_time(String starting,String add){
+         Date date = convert_string_time_into_original_time(starting);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, Integer.parseInt(add));
+        String ampm = DateUtils.getAMPMString(calendar.get(Calendar.AM_PM));
+        String hours = calendar.get(Calendar.HOUR)+"";
+        String minutes = calendar.get(Calendar.MINUTE)+"";
+
+
+        return  hours+":"+minutes+ampm;
+    }
+
 }

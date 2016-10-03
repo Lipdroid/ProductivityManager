@@ -119,6 +119,10 @@ public class ScheduleAdapter extends BaseAdapter {
                                 schedule.setOut_time("00:00");
                                 schedule.setBreak_time("00:00");
                                 schedule.setSchedule_no(GlobalUtils.CLOCK_OUT);
+                                schedule.setTarget_productivity(GlobalUtils.TARGET_PRODUCTIVITY);
+                                schedule.setTotal_treatment_time(GlobalUtils.TOTAL_TREATMENT_TIME);
+                                schedule.setTarget_treatment_time(GlobalUtils.get_target_treatment_hours(GlobalUtils.TARGET_PRODUCTIVITY,GlobalUtils.TOTAL_TREATMENT_TIME));
+                                schedule.setTarget_clockout_time(GlobalUtils.add_hours_to_time(schedule.getIn_time(),schedule.getTarget_treatment_time()));
 
                                 ((MainActivity) mContext).addItemToMainScheduleList(schedule);
 
@@ -142,6 +146,28 @@ public class ScheduleAdapter extends BaseAdapter {
                 );
             } else {
                 //currently running an session
+                GlobalUtils.showInfoDialog(mContext, "Error", "A session is ongoing currently,please clock out the on going" +
+                        "ongoing session", "OK", new SCDialogCallback() {
+                    @Override
+                    public void onAction1() {
+
+                    }
+
+                    @Override
+                    public void onAction2() {
+
+                    }
+
+                    @Override
+                    public void onAction3() {
+
+                    }
+
+                    @Override
+                    public void onAction4() {
+
+                    }
+                });
 
             }
         } else if (mListData.get(position).getSchedule_no().equals(GlobalUtils.CLOCK_OUT)) {
@@ -149,6 +175,7 @@ public class ScheduleAdapter extends BaseAdapter {
             schedule = mListData.get(position);
             schedule.setOut_time(GlobalUtils.getCurrentTime());
             schedule.setSchedule_no(GlobalUtils.SESSION_ENDED);
+
             ((MainActivity) mContext).updateItemToMainScheduleList(schedule);
             GlobalUtils.no_counting = true;
 
@@ -158,6 +185,8 @@ public class ScheduleAdapter extends BaseAdapter {
 
     }
 
+
+//  productivity = (total_treatment_time/actual_treatment_time)*100
 
     private void initListener(final int position) {
         mOnClickListener = new View.OnClickListener() {

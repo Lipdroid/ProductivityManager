@@ -45,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
     // Database Helper
     private DatabaseHelper db = null;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         scheduleAdapter = new ScheduleAdapter(this,
-                mListScheduleData,db);
+                mListScheduleData, db);
         mListSchedule.setAdapter(scheduleAdapter);
     }
 
@@ -138,10 +142,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void onPagerItemClick(View view, int index) {
 
-        if(GlobalUtils.getCurrentDate().getFormattedDate().equals(mListDate.get(index).getFormattedDate())){
+        if (GlobalUtils.getCurrentDate().getFormattedDate().equals(mListDate.get(index).getFormattedDate())) {
             mListSchedule.setVisibility(View.VISIBLE);
             update_Views(GlobalUtils.calculated_schedule);
-        }else{
+        } else {
             mListSchedule.setVisibility(View.INVISIBLE);
             reset_Views();
         }
@@ -158,9 +162,9 @@ public class MainActivity extends AppCompatActivity {
         update_list_from_db();
         mListScheduleData.add(nxt_schedule);
         //i dont know why bt scheduleadapter.notifydatasetchanged() is not working,so reinitializing it
-        scheduleAdapter = new ScheduleAdapter(this,
-                mListScheduleData,db);
-        mListSchedule.setAdapter(scheduleAdapter);    }
+        scheduleAdapter = new ScheduleAdapter(this, mListScheduleData, db);
+        mListSchedule.setAdapter(scheduleAdapter);
+    }
 
     private void update_list_from_db() {
         mListScheduleData = db.getAllSchedulesByDate(GlobalUtils.getCurrentDate().getFormattedDate());
@@ -169,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateItemToMainScheduleList(Schedule schedule) {
 
-        for (Schedule a_schedule:mListScheduleData) {
-            if(a_schedule.getId() != null && a_schedule.getId().equals(schedule.getId())){
+        for (Schedule a_schedule : mListScheduleData) {
+            if (a_schedule.getId() != null && a_schedule.getId().equals(schedule.getId())) {
                 a_schedule.setDate(schedule.getDate());
                 a_schedule.setId(schedule.getId());
                 a_schedule.setIn_time(schedule.getIn_time());
@@ -194,8 +198,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void update_a_schedule(Schedule schedule) {
 
-        for (Schedule a_schedule:mListScheduleData) {
-            if(a_schedule.getId() != null && a_schedule.getId().equals(schedule.getId())){
+        for (Schedule a_schedule : mListScheduleData) {
+            if (a_schedule.getId() != null && a_schedule.getId().equals(schedule.getId())) {
                 a_schedule.setDate(schedule.getDate());
                 a_schedule.setId(schedule.getId());
                 a_schedule.setIn_time(schedule.getIn_time());
@@ -213,38 +217,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void add_to_db(Schedule schedule){
+    private void add_to_db(Schedule schedule) {
         db.createSchedule(schedule);
     }
-    private  void update_db(Schedule schedule){
+
+    private void update_db(Schedule schedule) {
         db.updateSchedule(schedule);
     }
 
 
-    private void update_Views(Schedule schedule){
+    private void update_Views(Schedule schedule) {
 
         tv_target_treatment.setText(schedule.getTarget_treatment_time());
         tv_target_clock_out.setText(schedule.getTarget_clockout_time());
         tv_actual_treatment_time.setText(schedule.getActual_treatment_time());
         tv_actual_out_time.setText(schedule.getActual_clockout_time());
 
-        if(schedule.getTarget_productivity() != null)
-            GlobalUtils.showProgress(progress_target_productivity,Integer.parseInt(schedule.getTarget_productivity()));
+        if (schedule.getTarget_productivity() != null)
+            GlobalUtils.showProgress(progress_target_productivity, Integer.parseInt(schedule.getTarget_productivity()));
         else
-            GlobalUtils.showProgress(progress_target_productivity,78);
+            GlobalUtils.showProgress(progress_target_productivity, 78);
 
 
-        if(schedule.getTarget_productivity() != null)
-            GlobalUtils.showProgress(progress_actual_productivity,Integer.parseInt(schedule.getActual_productivity()));
+        if (schedule.getTarget_productivity() != null)
+            GlobalUtils.showProgress(progress_actual_productivity, Integer.parseInt(schedule.getActual_productivity()));
         else
-            GlobalUtils.showProgress(progress_actual_productivity,15);
-
+            GlobalUtils.showProgress(progress_actual_productivity, 15);
 
 
     }
 
 
-    private void reset_Views(){
+    private void reset_Views() {
 
         tv_target_treatment.setText("00:00");
         tv_target_clock_out.setText("00:00");
