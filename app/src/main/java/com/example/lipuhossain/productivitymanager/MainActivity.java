@@ -17,8 +17,11 @@ import com.example.lipuhossain.productivitymanager.database.DatabaseHelper;
 import com.example.lipuhossain.productivitymanager.models.CustomDate;
 import com.example.lipuhossain.productivitymanager.models.Schedule;
 import com.example.lipuhossain.productivitymanager.utils.GlobalUtils;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
@@ -192,9 +195,37 @@ public class MainActivity extends AppCompatActivity {
                 update_db(a_schedule);
             }
         }
+        update_list_from_db();
         scheduleAdapter.notifyDataSetChanged();
+        generate_calculate_show_view();
     }
+    public void generate_calculate_show_view(){
+        int items = mListScheduleData.size();
 
+        GlobalUtils.calculated_schedule.setTarget_productivity(GlobalUtils.TARGET_PRODUCTIVITY);
+        GlobalUtils.calculated_schedule.setTarget_clockout_time(mListScheduleData.get(mListScheduleData.size()-1).getTarget_clockout_time());
+        GlobalUtils.calculated_schedule.setActual_clockout_time(mListScheduleData.get(mListScheduleData.size()-1).getActual_clockout_time());
+
+        GlobalUtils.calculated_schedule.setTarget_treatment_time("");
+
+        int minute = 60;
+
+        for (Schedule schedule: mListScheduleData
+             ) {
+           // minute += Integer.parseInt(schedule.getActual_treatment_time());
+        }
+        int updated_hour = minute/60;
+        int updated_minute = minute%60;
+
+      GlobalUtils.calculated_schedule.setActual_treatment_time(updated_hour+":"+minute);
+        GlobalUtils.calculated_schedule.setActual_productivity("20");
+
+        update_Views(GlobalUtils.calculated_schedule);
+
+
+
+
+    }
 
     public void update_a_schedule(Schedule schedule) {
 
@@ -221,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
         db.createSchedule(schedule);
     }
 
-    private void update_db(Schedule schedule) {
+    public void update_db(Schedule schedule) {
         db.updateSchedule(schedule);
     }
 
@@ -236,13 +267,13 @@ public class MainActivity extends AppCompatActivity {
         if (schedule.getTarget_productivity() != null)
             GlobalUtils.showProgress(progress_target_productivity, Integer.parseInt(schedule.getTarget_productivity()));
         else
-            GlobalUtils.showProgress(progress_target_productivity, 78);
+            GlobalUtils.showProgress(progress_target_productivity, 0);
 
 
         if (schedule.getTarget_productivity() != null)
             GlobalUtils.showProgress(progress_actual_productivity, Integer.parseInt(schedule.getActual_productivity()));
         else
-            GlobalUtils.showProgress(progress_actual_productivity, 15);
+            GlobalUtils.showProgress(progress_actual_productivity, 0);
 
 
     }
@@ -259,5 +290,8 @@ public class MainActivity extends AppCompatActivity {
         GlobalUtils.resetProgress(progress_actual_productivity);
 
     }
+
+
+
 
 }

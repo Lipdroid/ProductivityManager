@@ -95,6 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TAG_BREAK_TIME, schedule.getBreak_time());
         values.put(KEY_TAG_SCHEDULE_NO, schedule.getSchedule_no());
         values.put(KEY_TAG_TOTAL_TREATMENT_TIME, schedule.getTotal_treatment_time());
+        values.put(KEY_TAG_TARGET_TREATMENT_TIME, schedule.getTarget_treatment_time());
         values.put(KEY_TAG_ACTUAL_TREATMENT_TIME, schedule.getActual_treatment_time());
         values.put(KEY_TAG_TARGET_PRODUCTIVITY, schedule.getTarget_productivity());
         values.put(KEY_TAG_ACTUAL_PRODUCTIVITY, schedule.getActual_productivity());
