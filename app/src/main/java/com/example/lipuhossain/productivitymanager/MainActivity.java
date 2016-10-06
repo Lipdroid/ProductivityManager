@@ -16,6 +16,7 @@ import com.example.lipuhossain.productivitymanager.adapters.ScheduleAdapter;
 import com.example.lipuhossain.productivitymanager.database.DatabaseHelper;
 import com.example.lipuhossain.productivitymanager.models.CustomDate;
 import com.example.lipuhossain.productivitymanager.models.Schedule;
+import com.example.lipuhossain.productivitymanager.models.Time;
 import com.example.lipuhossain.productivitymanager.utils.GlobalUtils;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -49,8 +50,16 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper db = null;
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onRestart() {
+        super.onRestart();
+        update_list_from_db();
+        if (mListScheduleData.size() != 0) {
+            GlobalUtils.TARGET_PRODUCTIVITY = mListScheduleData.get(0).getTarget_productivity();
+            generate_calculate_show_view();
+
+
+        }
+        initScheduleList();
     }
 
     @Override
@@ -62,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(getApplicationContext());
 
         findViewByIds();
-        initViewPager();
         initScheduleList();
+        initViewPager();
 
     }
 
@@ -147,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (GlobalUtils.getCurrentDate().getFormattedDate().equals(mListDate.get(index).getFormattedDate())) {
             mListSchedule.setVisibility(View.VISIBLE);
-            update_Views(GlobalUtils.calculated_schedule);
+           // generate_calculate_show_view();
         } else {
             mListSchedule.setVisibility(View.INVISIBLE);
             reset_Views();
@@ -199,30 +208,44 @@ public class MainActivity extends AppCompatActivity {
         scheduleAdapter.notifyDataSetChanged();
         generate_calculate_show_view();
     }
-    public void generate_calculate_show_view(){
+
+    public void generate_calculate_show_view() {
         int items = mListScheduleData.size();
 
-        GlobalUtils.calculated_schedule.setTarget_productivity(GlobalUtils.TARGET_PRODUCTIVITY);
-        GlobalUtils.calculated_schedule.setTarget_clockout_time(mListScheduleData.get(mListScheduleData.size()-1).getTarget_clockout_time());
-        GlobalUtils.calculated_schedule.setActual_clockout_time(mListScheduleData.get(mListScheduleData.size()-1).getActual_clockout_time());
+        GlobalUtils.calculated_schedule.setTarget_productivity(mListScheduleData.get(0).getTarget_productivity());
+        if (mListScheduleData.get(mListScheduleData.size() - 1).getTarget_clockout_time() != null) {
+            GlobalUtils.calculated_schedule.setTarget_clockout_time(mListScheduleData.get(mListScheduleData.size() - 1).getTarget_clockout_time());
+            GlobalUtils.calculated_schedule.setActual_clockout_time(mListScheduleData.get(mListScheduleData.size() - 1).getActual_clockout_time());
 
-        GlobalUtils.calculated_schedule.setTarget_treatment_time("");
+        }else{
+            GlobalUtils.calculated_schedule.setTarget_clockout_time(mListScheduleData.get(mListScheduleData.size() - 2).getTarget_clockout_time());
+            GlobalUtils.calculated_schedule.setActual_clockout_time(mListScheduleData.get(mListScheduleData.size() - 2).getActual_clockout_time());
 
-        int minute = 60;
-
-        for (Schedule schedule: mListScheduleData
-             ) {
-           // minute += Integer.parseInt(schedule.getActual_treatment_time());
         }
-        int updated_hour = minute/60;
-        int updated_minute = minute%60;
 
-      GlobalUtils.calculated_schedule.setActual_treatment_time(updated_hour+":"+minute);
-        GlobalUtils.calculated_schedule.setActual_productivity("20");
+        int target_treatment_time = Integer.parseInt(mListScheduleData.get(0).getTarget_treatment_time());
+        int updated_target_hour = target_treatment_time / 60;
+        int updated_target_minute = target_treatment_time % 60;
+
+        GlobalUtils.calculated_schedule.setTarget_treatment_time(updated_target_hour + ":" + updated_target_minute);
+
+        int minute = 0;
+
+        for (Schedule schedule : mListScheduleData
+                ) {
+            if(schedule.getActual_treatment_time()!= null) {
+                Time t = GlobalUtils.get_time(schedule.getActual_treatment_time() + " NO");
+                minute += Integer.parseInt(GlobalUtils.convertTimeInMinutes(t.getHours() + "", t.getMinutes() + ""));
+            }
+        }
+        int updated_hour = minute / 60;
+        int updated_minute = minute % 60;
+
+
+        GlobalUtils.calculated_schedule.setActual_treatment_time(updated_hour + ":" + updated_minute);
+       GlobalUtils.calculated_schedule.setActual_productivity(GlobalUtils.get_productivity(mListScheduleData.get(0).getTotal_treatment_time(), minute + ""));
 
         update_Views(GlobalUtils.calculated_schedule);
-
-
 
 
     }
@@ -264,13 +287,13 @@ public class MainActivity extends AppCompatActivity {
         tv_actual_treatment_time.setText(schedule.getActual_treatment_time());
         tv_actual_out_time.setText(schedule.getActual_clockout_time());
 
-        if (schedule.getTarget_productivity() != null)
+        if (schedule.getTarget_productivity() != null && !schedule.getTarget_productivity().equals(""))
             GlobalUtils.showProgress(progress_target_productivity, Integer.parseInt(schedule.getTarget_productivity()));
         else
             GlobalUtils.showProgress(progress_target_productivity, 0);
 
 
-        if (schedule.getTarget_productivity() != null)
+        if (schedule.getActual_productivity() != null && !schedule.getActual_productivity().equals(""))
             GlobalUtils.showProgress(progress_actual_productivity, Integer.parseInt(schedule.getActual_productivity()));
         else
             GlobalUtils.showProgress(progress_actual_productivity, 0);
@@ -290,8 +313,6 @@ public class MainActivity extends AppCompatActivity {
         GlobalUtils.resetProgress(progress_actual_productivity);
 
     }
-
-
 
 
 }

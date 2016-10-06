@@ -222,7 +222,7 @@ public class GlobalUtils {
         final Thread t = new Thread() {
             @Override
             public void run() {
-                int jumpTime = 0;
+                int jumpTime = progress.getProgress();
 
                 while(jumpTime < value) {
                     try {
@@ -310,8 +310,16 @@ public class GlobalUtils {
     }
     //Calculate productivity
     public static String get_productivity(String total_treatment_hours,String actual_treatment_hours){
-        int productivity = ((Integer.parseInt(total_treatment_hours)/Integer.parseInt(actual_treatment_hours))*100);
+        int productivity = 0;
+        try {
+             productivity = ((Integer.parseInt(total_treatment_hours)/Integer.parseInt(actual_treatment_hours))*100);
+            return productivity+"";
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return productivity+"";
+
+
     }
 
     //Calculate how long have to stay in the office
