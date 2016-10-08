@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
         //calculate again
         for (Schedule schedule : mListScheduleData) {
-            if (schedule.getId() != null && schedule.getSchedule_no().equals(GlobalUtils.SESSION_ENDED)) {
+            if (schedule.getId() != null) {
                 updated = true;
                 GlobalUtils.TARGET_PRODUCTIVITY = GlobalUtils.preferences(this).getString(Constants.TARGET_PRODUCTIVITY, "0");
                 GlobalUtils.TOTAL_TREATMENT_TIME = GlobalUtils.preferences(this).getString(Constants.TOTAL_TREATMENT_TIME, "0");
@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString(Constants.TARGET_TREATMENT_TIME, schedule.getTarget_treatment_time());
                 editor.commit();
                 if (schedule.getBreak_time() != null && !schedule.getBreak_time().equals("00:00")) {
-                    Time break_time = GlobalUtils.get_time(schedule.getBreak_time());
+                    Time break_time = GlobalUtils.get_time(schedule.getBreak_time()+" NO");
                     Time t = GlobalUtils.get_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
                     String get_clock_out = GlobalUtils.get_target_clockout(t, GlobalUtils.convertTimeInMinutes(break_time.getHours() + "", break_time.getMinutes() + ""));
                     schedule.setTarget_clockout_time(get_clock_out);
@@ -248,7 +248,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (GlobalUtils.getCurrentDate().getFormattedDate().equals(mListDate.get(index).getFormattedDate())) {
             mListSchedule.setVisibility(View.VISIBLE);
-            generate_calculate_show_view();
+            if (mListScheduleData.get(0).getId() != null)
+                generate_calculate_show_view();
         } else {
             mListSchedule.setVisibility(View.INVISIBLE);
             reset_Views();
