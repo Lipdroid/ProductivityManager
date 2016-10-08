@@ -1,6 +1,7 @@
 package com.example.lipuhossain.productivitymanager.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.lipuhossain.productivitymanager.R;
+import com.example.lipuhossain.productivitymanager.constants.Constants;
 import com.example.lipuhossain.productivitymanager.customViews.SCCustomDialog;
 import com.example.lipuhossain.productivitymanager.interfaces.DialogForValueCallback;
 import com.example.lipuhossain.productivitymanager.interfaces.SCDialogCallback;
@@ -31,6 +33,7 @@ import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class GlobalUtils {
 
+    public static String TARGET_TREATMENT_TIME = "0";
     public static String TARGET_PRODUCTIVITY = "";
     public static String TOTAL_TREATMENT_TIME = "0";
     public static  boolean no_counting = true;
@@ -40,7 +43,10 @@ public class GlobalUtils {
     public static Schedule calculated_schedule = new Schedule();
 
 
-
+    public static SharedPreferences preferences(Context mContext){
+        SharedPreferences prefs = mContext.getSharedPreferences(Constants.PREFS_NAME, mContext.MODE_PRIVATE);
+        return  prefs;
+    }
 
     public static String convertTimeInMinutes(String hours,String minutes){
         return Integer.toString((Integer.parseInt(hours)*60)+Integer.parseInt(minutes));
@@ -162,7 +168,20 @@ public class GlobalUtils {
 
         String ampm = DateUtils.getAMPMString(calendar.get(Calendar.AM_PM));
 
-        String date = calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) +" "+ampm;
+        int hourOfDay =calendar.get(Calendar.HOUR);
+        if (hourOfDay >= 12) {
+            if (hourOfDay != 12)
+                hourOfDay -= 12;
+        } else {
+            if (hourOfDay == 0)
+                hourOfDay += 12;
+        }
+
+        String date = String.format("%02d",hourOfDay )
+                + ":"
+                + String.format("%02d",calendar.get(Calendar.MINUTE))
+                +" "
+                +ampm;
 
         return date;
 
@@ -222,6 +241,7 @@ public class GlobalUtils {
         final Thread t = new Thread() {
             @Override
             public void run() {
+                if(value <= 100){
                 int jumpTime = progress.getProgress();
 
                 while(jumpTime < value) {
@@ -229,11 +249,11 @@ public class GlobalUtils {
                         sleep(35);
                         jumpTime += 1;
                         progress.setProgress(jumpTime);
-                    }
-                    catch (InterruptedException e) {
+                    } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
+                }
                 }
             }
         };
@@ -324,8 +344,9 @@ public class GlobalUtils {
 
     //Calculate how long have to stay in the office
     public static String get_target_treatment_hours(String productivity,String total_treatment_hours){
-        int  actual_treatment_hours = ((Integer.parseInt(total_treatment_hours)/Integer.parseInt(productivity))*100);
-        return actual_treatment_hours+"";
+        Double  actual_treatment_hours = ((Double.parseDouble(total_treatment_hours)/Double.parseDouble(productivity))*100);
+        int value = actual_treatment_hours.intValue();
+        return value+"";
     }
 
     //convert String into time
@@ -472,6 +493,94 @@ public class GlobalUtils {
     }
 
 
+    //Dialog implementation
+
+    public static void showDialogToChangeTotalTime(final Context context, final DialogForValueCallback dialogCallback) {
+        final SCCustomDialog infoDialog = new SCCustomDialog(context, R.style.CustomDialogTheme);
+        LayoutInflater inflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.dialog_change_total_target, null);
+
+        new SCMultipleScreen(context);
+        SCMultipleScreen.resizeAllView((ViewGroup) v);
+
+        infoDialog.setContentView(v);
+
+        Button btnADD = (Button) infoDialog.findViewById(R.id.dialog_btn_positive);
+        Button btnSUB = (Button) infoDialog.findViewById(R.id.dialog_btn_negative);
+        Button btnDismiss = (Button) infoDialog.findViewById(R.id.dialog_btn_cancel);
+
+
+        final EditText hours = (EditText) infoDialog.findViewById(R.id.et_hour);
+        final EditText minutes = (EditText) infoDialog.findViewById(R.id.et_minute);
+
+
+        btnADD.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                if (dialogCallback != null) {
+                    String hours_txt = "";
+                    String minutes_txt = "00";
+
+                    if(!hours.getText().toString().isEmpty()){
+                        hours_txt = hours.getText().toString().trim();
+                    }else{
+                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK",null);
+                        return;
+                    }
+                    if(!minutes.getText().toString().isEmpty()){
+                        minutes_txt = minutes.getText().toString().trim();
+                    }
+                    dialogCallback.onAction3(0,hours_txt,minutes_txt);
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+
+        btnSUB.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                //your business logic
+                if (dialogCallback != null) {
+                    String hours_txt = "";
+                    String minutes_txt = "00";
+
+                    if(!hours.getText().toString().isEmpty()){
+                        hours_txt = hours.getText().toString().trim();
+                    }else{
+                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK",null);
+                        return;
+                    }
+                    if(!minutes.getText().toString().isEmpty()){
+                        minutes_txt = minutes.getText().toString().trim();
+                    }
+                    dialogCallback.onAction3(1,hours_txt,minutes_txt);
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+        btnDismiss.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                if (dialogCallback != null) {
+                    dialogCallback.onAction2();
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+
+        infoDialog.show();
+    }
+
+
     public static Time get_time(String time){
        Time t = new Time();
         String[] separated = time.split(":");
@@ -532,7 +641,11 @@ public class GlobalUtils {
                 ampm = "PM";
             }
         }
-        clockput = updated_hour+":"+updated_minute+" "+ampm;
+        clockput = (String.format("%02d", updated_hour)
+                + ":"
+                + String.format("%02d", updated_minute)
+                + " "
+                + ampm);
 
         return clockput;
 

@@ -5,5 +5,6 @@ package com.example.lipuhossain.productivitymanager.interfaces;
  */
 public interface DialogForValueCallback {
     public void onAction1(String productivity, String hour, String minutes);
+    public void onAction3(int type, String hour, String minutes);
     public void onAction2();
 }

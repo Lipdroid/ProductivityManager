@@ -1,5 +1,6 @@
 package com.example.lipuhossain.productivitymanager;
 
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -7,13 +8,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.lipuhossain.productivitymanager.adapters.BookNowDateListAdapter;
 import com.example.lipuhossain.productivitymanager.adapters.ScheduleAdapter;
+import com.example.lipuhossain.productivitymanager.constants.Constants;
 import com.example.lipuhossain.productivitymanager.database.DatabaseHelper;
+import com.example.lipuhossain.productivitymanager.interfaces.DialogForValueCallback;
+import com.example.lipuhossain.productivitymanager.interfaces.SCDialogCallback;
 import com.example.lipuhossain.productivitymanager.models.CustomDate;
 import com.example.lipuhossain.productivitymanager.models.Schedule;
 import com.example.lipuhossain.productivitymanager.models.Time;
@@ -44,21 +49,29 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_target_clock_out = null;
     private TextView tv_actual_treatment_time = null;
     private TextView tv_actual_out_time = null;
+    private TextView tv_actual_productivity = null;
+    private TextView tv_target_productivity = null;
 
 
     // Database Helper
     private DatabaseHelper db = null;
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onResume() {
+        super.onResume();
+        //getting previous data
+        GlobalUtils.TARGET_PRODUCTIVITY = GlobalUtils.preferences(this).getString(Constants.TARGET_PRODUCTIVITY, "0");
+        GlobalUtils.TOTAL_TREATMENT_TIME = GlobalUtils.preferences(this).getString(Constants.TOTAL_TREATMENT_TIME, "0");
+        //collect all the data from sqlite database for current date
         update_list_from_db();
+        //check if there is data or not
         if (mListScheduleData.size() != 0) {
-            GlobalUtils.TARGET_PRODUCTIVITY = mListScheduleData.get(0).getTarget_productivity();
             generate_calculate_show_view();
-
-
+        } else {
+            //if not reset all the views
+            reset_Views();
         }
+        //init the list again with data or no data
         initScheduleList();
     }
 
@@ -79,14 +92,11 @@ public class MainActivity extends AppCompatActivity {
     private void initScheduleList() {
         if (db.CheckIsDataAlreadyInDBorNot(GlobalUtils.getCurrentDate().getFormattedDate())) {
             mListScheduleData = db.getAllSchedulesByDate(GlobalUtils.getCurrentDate().getFormattedDate());
-            Schedule schedule = new Schedule();
-            schedule.setSchedule_no(GlobalUtils.CLOCK_IN);
-            mListScheduleData.add(schedule);
+            add_item_with_clock_in();
         } else {
             mListScheduleData = new ArrayList<Schedule>();
-            Schedule schedule = new Schedule();
-            schedule.setSchedule_no(GlobalUtils.CLOCK_IN);
-            mListScheduleData.add(schedule);
+            add_item_with_clock_in();
+            reset_Views();
         }
 
         scheduleAdapter = new ScheduleAdapter(this,
@@ -100,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
         tv_target_clock_out = (TextView) findViewById(R.id.tv_target_clock_out);
         tv_actual_treatment_time = (TextView) findViewById(R.id.tv_actual_treatment_time);
         tv_actual_out_time = (TextView) findViewById(R.id.tv_actual_out_time);
+        tv_actual_productivity = (TextView) findViewById(R.id.actual_product);
+        tv_target_productivity = (TextView) findViewById(R.id.target_product);
+
 
         pager = (ViewPager) findViewById(R.id.date_pager);
         progress_target_productivity = (RingProgressBar) findViewById(R.id.estimated_progress);
@@ -112,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(this.LAYOUT_INFLATER_SERVICE);
         View listHeader = inflater.inflate(R.layout.design_parralax, null);
         stickyViewSpacer = listHeader.findViewById(R.id.stickyViewPlaceholder);
+
+
 
         /* Add list view header */
         mListSchedule.addHeaderView(listHeader);
@@ -141,6 +156,83 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void aftererClickTarget() {
+        GlobalUtils.showDialogToChangeTotalTime(this, new DialogForValueCallback() {
+            @Override
+            public void onAction1(String productivity, String hour, String minutes) {
+
+            }
+
+            @Override
+            public void onAction3(int type, String hour, String minutes) {
+                if (type == 0) {
+                    //add with the total treatment time
+                    int add_minute = Integer.parseInt(GlobalUtils.convertTimeInMinutes(hour, minutes));
+                    int old_minute = Integer.parseInt(GlobalUtils.TOTAL_TREATMENT_TIME);
+                    GlobalUtils.TOTAL_TREATMENT_TIME = (old_minute + add_minute) + "";
+                    //update all the data in the sqlite database
+                    update_all_the_data_according_to_new_total_treatment_time(GlobalUtils.TOTAL_TREATMENT_TIME);
+                    //update the listview from the new data from database
+
+                } else if (type == 1) {
+                    //substract from the total treatment time
+                    //add with the total treatment time
+                    int add_minute = Integer.parseInt(GlobalUtils.convertTimeInMinutes(hour, minutes));
+                    int old_minute = Integer.parseInt(GlobalUtils.TOTAL_TREATMENT_TIME);
+                    GlobalUtils.TOTAL_TREATMENT_TIME = (old_minute - add_minute) + "";
+                    //update all the data in the sqlite database
+                    update_all_the_data_according_to_new_total_treatment_time(GlobalUtils.TOTAL_TREATMENT_TIME);
+                    //update the listview from the new data from database
+
+                }
+
+            }
+
+            @Override
+            public void onAction2() {
+
+            }
+        });
+    }
+
+    private void update_all_the_data_according_to_new_total_treatment_time(String totalTreatmentTime) {
+        boolean updated = false;
+        SharedPreferences.Editor editor = GlobalUtils.preferences(this).edit();
+        editor.putString(Constants.TOTAL_TREATMENT_TIME, totalTreatmentTime);
+        editor.commit();
+        //calculate again
+        for (Schedule schedule : mListScheduleData) {
+            if (schedule.getId() != null && schedule.getSchedule_no().equals(GlobalUtils.SESSION_ENDED)) {
+                updated = true;
+                GlobalUtils.TARGET_PRODUCTIVITY = GlobalUtils.preferences(this).getString(Constants.TARGET_PRODUCTIVITY, "0");
+                GlobalUtils.TOTAL_TREATMENT_TIME = GlobalUtils.preferences(this).getString(Constants.TOTAL_TREATMENT_TIME, "0");
+                schedule.setTotal_treatment_time(GlobalUtils.TOTAL_TREATMENT_TIME);
+                schedule.setTarget_treatment_time(GlobalUtils.get_target_treatment_hours(GlobalUtils.TARGET_PRODUCTIVITY, GlobalUtils.TOTAL_TREATMENT_TIME));
+                //save the target treatment_time which is fixed
+                editor.putString(Constants.TARGET_TREATMENT_TIME, schedule.getTarget_treatment_time());
+                editor.commit();
+                if (schedule.getBreak_time() != null && !schedule.getBreak_time().equals("00:00")) {
+                    Time break_time = GlobalUtils.get_time(schedule.getBreak_time());
+                    Time t = GlobalUtils.get_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
+                    String get_clock_out = GlobalUtils.get_target_clockout(t, GlobalUtils.convertTimeInMinutes(break_time.getHours() + "", break_time.getMinutes() + ""));
+                    schedule.setTarget_clockout_time(get_clock_out);
+                } else {
+                    //calculate target clockout time depending on the target treatment time(intime + target treatment time)
+                    schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
+                }
+                schedule.setActual_productivity(GlobalUtils.get_productivity(schedule.getTotal_treatment_time(), schedule.getActual_treatment_time()));
+                update_a_schedule(schedule);
+
+
+            }
+
+        }
+        if (updated) {
+            update_list_from_db();
+            generate_calculate_show_view();
+        }
+    }
+
     private void initViewPager() {
         mListDate = GlobalUtils.getDates();
         adapter = new BookNowDateListAdapter(this, R.layout.layout_date_item,
@@ -156,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (GlobalUtils.getCurrentDate().getFormattedDate().equals(mListDate.get(index).getFormattedDate())) {
             mListSchedule.setVisibility(View.VISIBLE);
-           // generate_calculate_show_view();
+            generate_calculate_show_view();
         } else {
             mListSchedule.setVisibility(View.INVISIBLE);
             reset_Views();
@@ -168,14 +260,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void addItemToMainScheduleList(Schedule schedule) {
+        //add to database
+        add_to_db(schedule);
+        //get all list again to get the all the ids
+        update_list_from_db();
+        //add an extra item to the list
         Schedule nxt_schedule = new Schedule();
         nxt_schedule.setSchedule_no(GlobalUtils.CLOCK_IN);
-        add_to_db(schedule);
-        update_list_from_db();
         mListScheduleData.add(nxt_schedule);
         //i dont know why bt scheduleadapter.notifydatasetchanged() is not working,so reinitializing it
         scheduleAdapter = new ScheduleAdapter(this, mListScheduleData, db);
         mListSchedule.setAdapter(scheduleAdapter);
+        //update the views
+        generate_calculate_show_view();
     }
 
     private void update_list_from_db() {
@@ -212,39 +309,54 @@ public class MainActivity extends AppCompatActivity {
     public void generate_calculate_show_view() {
         int items = mListScheduleData.size();
 
-        GlobalUtils.calculated_schedule.setTarget_productivity(mListScheduleData.get(0).getTarget_productivity());
+        GlobalUtils.TARGET_PRODUCTIVITY = GlobalUtils.preferences(this).getString(Constants.TARGET_PRODUCTIVITY, "0");
+        GlobalUtils.TOTAL_TREATMENT_TIME = GlobalUtils.preferences(this).getString(Constants.TOTAL_TREATMENT_TIME, "0");
+        GlobalUtils.TARGET_TREATMENT_TIME = GlobalUtils.preferences(this).getString(Constants.TARGET_TREATMENT_TIME, "0");
+
+        GlobalUtils.calculated_schedule.setTarget_productivity(GlobalUtils.TARGET_PRODUCTIVITY);
+        GlobalUtils.calculated_schedule.setTotal_treatment_time(GlobalUtils.TOTAL_TREATMENT_TIME);
+        GlobalUtils.calculated_schedule.setTarget_treatment_time(GlobalUtils.TARGET_TREATMENT_TIME);
+
+
         if (mListScheduleData.get(mListScheduleData.size() - 1).getTarget_clockout_time() != null) {
             GlobalUtils.calculated_schedule.setTarget_clockout_time(mListScheduleData.get(mListScheduleData.size() - 1).getTarget_clockout_time());
             GlobalUtils.calculated_schedule.setActual_clockout_time(mListScheduleData.get(mListScheduleData.size() - 1).getActual_clockout_time());
 
-        }else{
+        } else {
             GlobalUtils.calculated_schedule.setTarget_clockout_time(mListScheduleData.get(mListScheduleData.size() - 2).getTarget_clockout_time());
             GlobalUtils.calculated_schedule.setActual_clockout_time(mListScheduleData.get(mListScheduleData.size() - 2).getActual_clockout_time());
 
         }
 
-        int target_treatment_time = Integer.parseInt(mListScheduleData.get(0).getTarget_treatment_time());
-        int updated_target_hour = target_treatment_time / 60;
-        int updated_target_minute = target_treatment_time % 60;
+        if (!GlobalUtils.TARGET_TREATMENT_TIME.equals("0")) {
+            int target_treatment_time = Integer.parseInt(GlobalUtils.TARGET_TREATMENT_TIME);
+            int updated_target_hour = target_treatment_time / 60;
+            int updated_target_minute = target_treatment_time % 60;
+            GlobalUtils.calculated_schedule.setTarget_treatment_time(String.format("%02d", updated_target_hour)
+                    + ":"
+                    + String.format("%02d", updated_target_minute));
+        }
 
-        GlobalUtils.calculated_schedule.setTarget_treatment_time(updated_target_hour + ":" + updated_target_minute);
 
         int minute = 0;
 
         for (Schedule schedule : mListScheduleData
                 ) {
-            if(schedule.getActual_treatment_time()!= null) {
+            if (schedule.getActual_treatment_time() != null) {
                 Time t = GlobalUtils.get_time(schedule.getActual_treatment_time() + " NO");
                 minute += Integer.parseInt(GlobalUtils.convertTimeInMinutes(t.getHours() + "", t.getMinutes() + ""));
             }
         }
-        int updated_hour = minute / 60;
-        int updated_minute = minute % 60;
 
+        if (minute != 0) {
+            int updated_hour = minute / 60;
+            int updated_minute = minute % 60;
+            GlobalUtils.calculated_schedule.setActual_treatment_time(String.format("%02d", updated_hour)
+                    + ":"
+                    + String.format("%02d", updated_minute));
+            GlobalUtils.calculated_schedule.setActual_productivity(GlobalUtils.get_productivity(GlobalUtils.TOTAL_TREATMENT_TIME, minute + ""));
 
-        GlobalUtils.calculated_schedule.setActual_treatment_time(updated_hour + ":" + updated_minute);
-       GlobalUtils.calculated_schedule.setActual_productivity(GlobalUtils.get_productivity(mListScheduleData.get(0).getTotal_treatment_time(), minute + ""));
-
+        }
         update_Views(GlobalUtils.calculated_schedule);
 
 
@@ -267,6 +379,8 @@ public class MainActivity extends AppCompatActivity {
                 a_schedule.setActual_productivity(schedule.getActual_productivity());
                 a_schedule.setTarget_clockout_time(schedule.getTarget_clockout_time());
                 a_schedule.setActual_clockout_time(schedule.getActual_clockout_time());
+
+                update_db(a_schedule);
             }
         }
     }
@@ -287,16 +401,21 @@ public class MainActivity extends AppCompatActivity {
         tv_actual_treatment_time.setText(schedule.getActual_treatment_time());
         tv_actual_out_time.setText(schedule.getActual_clockout_time());
 
-        if (schedule.getTarget_productivity() != null && !schedule.getTarget_productivity().equals(""))
+        if (schedule.getTarget_productivity() != null && !schedule.getTarget_productivity().equals("0")) {
+            tv_target_productivity.setText("(" + schedule.getTarget_productivity() + "%)");
             GlobalUtils.showProgress(progress_target_productivity, Integer.parseInt(schedule.getTarget_productivity()));
-        else
+        } else {
+            tv_target_productivity.setText("(" + 0 + "%)");
             GlobalUtils.showProgress(progress_target_productivity, 0);
+        }
 
-
-        if (schedule.getActual_productivity() != null && !schedule.getActual_productivity().equals(""))
+        if (schedule.getActual_productivity() != null && !schedule.getActual_productivity().equals("0")) {
+            tv_actual_productivity.setText("(" + schedule.getActual_productivity() + "%)");
             GlobalUtils.showProgress(progress_actual_productivity, Integer.parseInt(schedule.getActual_productivity()));
-        else
+        } else {
+            tv_actual_productivity.setText("(" + 0 + "%)");
             GlobalUtils.showProgress(progress_actual_productivity, 0);
+        }
 
 
     }
@@ -311,8 +430,45 @@ public class MainActivity extends AppCompatActivity {
 
         GlobalUtils.resetProgress(progress_target_productivity);
         GlobalUtils.resetProgress(progress_actual_productivity);
+        tv_target_productivity.setText("(" + 0 + "%)");
+        tv_actual_productivity.setText("(" + 0 + "%)");
+
 
     }
 
 
+    private void add_item_with_clock_in() {
+        Schedule schedule = new Schedule();
+        schedule.setSchedule_no(GlobalUtils.CLOCK_IN);
+        mListScheduleData.add(schedule);
+    }
+
+
+    public void afterClickedEdit(View view) {
+        if (GlobalUtils.TARGET_TREATMENT_TIME.equals("0")) {
+            GlobalUtils.showInfoDialog(this, "Error", "You have not entered your total treatment time yet", "OK", new SCDialogCallback() {
+                @Override
+                public void onAction1() {
+
+                }
+
+                @Override
+                public void onAction2() {
+
+                }
+
+                @Override
+                public void onAction3() {
+
+                }
+
+                @Override
+                public void onAction4() {
+
+                }
+            });
+        } else {
+            aftererClickTarget();
+        }
+    }
 }
