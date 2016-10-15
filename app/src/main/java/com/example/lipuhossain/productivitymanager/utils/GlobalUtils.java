@@ -6,6 +6,8 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,6 +17,7 @@ import com.example.lipuhossain.productivitymanager.constants.Constants;
 import com.example.lipuhossain.productivitymanager.customViews.SCCustomDialog;
 import com.example.lipuhossain.productivitymanager.interfaces.DialogForValueCallback;
 import com.example.lipuhossain.productivitymanager.interfaces.SCDialogCallback;
+import com.example.lipuhossain.productivitymanager.interfaces.SeachDialogCallback;
 import com.example.lipuhossain.productivitymanager.models.CustomDate;
 import com.example.lipuhossain.productivitymanager.models.Schedule;
 import com.example.lipuhossain.productivitymanager.models.Time;
@@ -330,10 +333,11 @@ public class GlobalUtils {
     }
     //Calculate productivity
     public static String get_productivity(String total_treatment_hours,String actual_treatment_hours){
-        int productivity = 0;
+        Double productivity = 0.0;
         try {
-             productivity = ((Integer.parseInt(total_treatment_hours)/Integer.parseInt(actual_treatment_hours))*100);
-            return productivity+"";
+            productivity = ((Double.parseDouble(total_treatment_hours)/Double.parseDouble(actual_treatment_hours))*100);
+            int value = productivity.intValue();
+            return value+"";
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -579,6 +583,84 @@ public class GlobalUtils {
 
         infoDialog.show();
     }
+
+
+
+    public static void showDialogSearch(final Context context,final ArrayList<String> datelist,final SeachDialogCallback dialogCallback) {
+        final SCCustomDialog infoDialog = new SCCustomDialog(context, R.style.CustomDialogTheme);
+        LayoutInflater inflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.dialog_search_date, null);
+
+        new SCMultipleScreen(context);
+        SCMultipleScreen.resizeAllView((ViewGroup) v);
+
+        infoDialog.setContentView(v);
+
+        Button OK = (Button) infoDialog.findViewById(R.id.dialog_btn_positive);
+        Button btnDismiss = (Button) infoDialog.findViewById(R.id.dialog_btn_negative);
+        Button btnAll = (Button) infoDialog.findViewById(R.id.dialog_btn_all);
+
+
+
+        final AutoCompleteTextView date = (AutoCompleteTextView) infoDialog.findViewById(R.id.et_minute);
+        String [] dates = datelist.toArray(new String[datelist.size()]);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, dates);
+
+        date.setThreshold(1);
+
+        //Set adapter to AutoCompleteTextView
+        date.setAdapter(adapter);
+
+        OK.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                String search_txt = "";
+
+                if (dialogCallback != null) {
+                    if(!date.getText().toString().isEmpty()){
+                        search_txt = date.getText().toString().trim();
+                    }else{
+                        showInfoDialog(context, "Error", "Please type your date first", "OK",null);
+                        return;
+                    }
+                    dialogCallback.onAction1(search_txt);
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+        btnDismiss.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                if (dialogCallback != null) {
+                    dialogCallback.onAction2();
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+        btnAll.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                if (dialogCallback != null) {
+                    dialogCallback.onAction3();
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+
+
+        infoDialog.show();
+    }
+
 
 
     public static Time get_time(String time){

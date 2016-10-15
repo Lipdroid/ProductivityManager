@@ -123,7 +123,7 @@ public class ScheduleAdapter extends BaseAdapter {
                     GlobalUtils.showDialogToGetUserInput(mContext, new DialogForValueCallback() {
                         @Override
                         public void onAction1(String productivity, String hour, String minutes) {
-                           // Toast.makeText(mContext, productivity + " " + hour + " " + minutes, Toast.LENGTH_LONG).show();
+                            // Toast.makeText(mContext, productivity + " " + hour + " " + minutes, Toast.LENGTH_LONG).show();
                             GlobalUtils.no_counting = false;
                             //target productivity and total treatment time is fixed,thats why saved in the sharedPreference
                             SharedPreferences.Editor editor = GlobalUtils.preferences(mContext).edit();
@@ -228,7 +228,7 @@ public class ScheduleAdapter extends BaseAdapter {
                             Schedule pre_sch = mListData.get(position - 1);
                             String out = pre_sch.getOut_time();
                             Time break_time = GlobalUtils.get_break(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(out));
-                            pre_sch.setBreak_time(String.format("%02d",break_time.getHours()) + ":" + String.format("%02d",break_time.getMinutes()));
+                            pre_sch.setBreak_time(String.format("%02d", break_time.getHours()) + ":" + String.format("%02d", break_time.getMinutes()));
                             schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(pre_sch.getTarget_clockout_time()), GlobalUtils.convertTimeInMinutes(GlobalUtils.get_time(pre_sch.getBreak_time() + " NO").getHours() + "", GlobalUtils.get_time(pre_sch.getBreak_time() + " NO").getMinutes() + "")));
 
 
@@ -268,19 +268,46 @@ public class ScheduleAdapter extends BaseAdapter {
 
             }
         } else if (mListData.get(position).getSchedule_no().equals(GlobalUtils.CLOCK_OUT)) {
-            schedule = mListData.get(position);
-            schedule.setOut_time(GlobalUtils.getCurrentTime());
-            Time actual_treatment_time = GlobalUtils.get_actual_working_hours(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(schedule.getOut_time()));
-            schedule.setActual_treatment_time(String.format("%02d",actual_treatment_time.getHours())
-                    + ":"
-                    + String.format("%02d",actual_treatment_time.getMinutes()));
-            schedule.setSchedule_no(GlobalUtils.SESSION_ENDED);
-            schedule.setActual_productivity(GlobalUtils.get_productivity(GlobalUtils.TOTAL_TREATMENT_TIME, GlobalUtils.convertTimeInMinutes(actual_treatment_time.getHours() + "", actual_treatment_time.getMinutes() + "")));
-            schedule.setActual_clockout_time(schedule.getOut_time());
 
-            ((MainActivity) mContext).updateItemToMainScheduleList(schedule);
-            GlobalUtils.no_counting = true;
 
+            Calendar now = Calendar.getInstance();
+            TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+
+                    String ampm = "";
+                    if (hourOfDay >= 12) {
+                        if (hourOfDay != 12)
+                            hourOfDay -= 12;
+                        ampm = "PM";
+                    } else {
+                        if (hourOfDay == 0)
+                            hourOfDay += 12;
+                        ampm = "AM";
+                    }
+                    schedule = mListData.get(position);
+                    schedule.setOut_time(String.format("%02d", hourOfDay)
+                            + ":"
+                            + String.format("%02d", minute)
+                            + " "
+                            + ampm);
+
+                    Time actual_treatment_time = GlobalUtils.get_actual_working_hours(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(schedule.getOut_time()));
+                    schedule.setActual_treatment_time(String.format("%02d",actual_treatment_time.getHours())
+                            + ":"
+                            + String.format("%02d",actual_treatment_time.getMinutes()));
+                    schedule.setSchedule_no(GlobalUtils.SESSION_ENDED);
+                    schedule.setActual_productivity(GlobalUtils.get_productivity(GlobalUtils.TOTAL_TREATMENT_TIME, GlobalUtils.convertTimeInMinutes(actual_treatment_time.getHours() + "", actual_treatment_time.getMinutes() + "")));
+                    schedule.setActual_clockout_time(schedule.getOut_time());
+
+                    ((MainActivity) mContext).updateItemToMainScheduleList(schedule);
+                    GlobalUtils.no_counting = true;
+
+
+                }
+            }, now.get(Calendar.HOUR), now.get(Calendar.MINUTE), false);
+
+            tpd.show(((Activity) mContext).getFragmentManager(), "Timepickerdialog");
 
         }
 

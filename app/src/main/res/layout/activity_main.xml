@@ -19,6 +19,7 @@
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
             android:layout_margin="11dp"
+            android:onClick="afterClickHistory"
             android:src="@drawable/history" />
 
 
@@ -58,7 +59,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/img_history"
                 android:layout_marginLeft="40dp"
                 android:orientation="vertical">
 
@@ -156,7 +156,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/img_history"
                 android:layout_marginRight="30dp"
                 android:orientation="vertical">
 

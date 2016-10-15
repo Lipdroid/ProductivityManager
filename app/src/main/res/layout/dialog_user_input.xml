@@ -46,7 +46,7 @@
                 android:layout_marginRight="84px"
                 android:layout_marginTop="51px"
                 android:tag="44"
-                android:text="Set your target productivity today"
+                android:text="Set your target productivity for today"
                 android:textColor="@color/main_dark"
                 android:textSize="44px" />
 
@@ -98,7 +98,7 @@
                 android:layout_marginRight="84px"
                 android:layout_marginTop="51px"
                 android:tag="44"
-                android:text="Set your total time "
+                android:text="Set your total treatment time "
                 android:textColor="@color/main_dark"
                 android:textSize="44px" />
 

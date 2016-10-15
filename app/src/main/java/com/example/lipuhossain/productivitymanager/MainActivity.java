@@ -1,5 +1,6 @@
 package com.example.lipuhossain.productivitymanager;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.v4.view.ViewPager;
@@ -471,5 +472,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             aftererClickTarget();
         }
+    }
+
+    public void afterClickHistory(View view) {
+        Intent intent = new Intent(MainActivity.this,HistoryActivity.class);
+        startActivity(intent);
     }
 }
