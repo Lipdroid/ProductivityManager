@@ -80,12 +80,18 @@ public class ScheduleAdapter extends BaseAdapter {
             mHolder.header = (TextView) convertView.findViewById(R.id.header_text);
             mHolder.break_layout = (RelativeLayout) convertView.findViewById(R.id.rl_break);
 
+            mHolder.divider_one = (View) convertView.findViewById(R.id.divider_one);
+            mHolder.divider_two = (View) convertView.findViewById(R.id.divider_two);
+
 
             convertView.setTag(mHolder);
         } else {
             mHolder = (ScheduleHolder) convertView.getTag();
         }
         Schedule data = mListData.get(position);
+        if (position == 0) {
+            mHolder.divider_one.setVisibility(View.GONE);
+        }
 
         if (data.getSchedule_no().equals(GlobalUtils.CLOCK_IN)) {
             mHolder.time_layout.setVisibility(View.GONE);
@@ -94,15 +100,23 @@ public class ScheduleAdapter extends BaseAdapter {
         }
         if (data.getBreak_time() != null && data.getBreak_time().equals("00:00")) {
             mHolder.break_layout.setVisibility(View.GONE);
+            mHolder.divider_two.setVisibility(View.GONE);
         } else {
             mHolder.break_layout.setVisibility(View.VISIBLE);
+            mHolder.divider_two.setVisibility(View.VISIBLE);
         }
 
         mHolder.header.setText(data.getSchedule_no());
         mHolder.tvIntime.setText(data.getIn_time());
         mHolder.tvOuttime.setText(data.getOut_time());
         mHolder.tvBreaktime.setText(data.getBreak_time());
-        mHolder.header.setText(data.getSchedule_no());
+        if (data.getSchedule_no().equals(GlobalUtils.SESSION_ENDED)) {
+            mHolder.main_btn.setVisibility(View.GONE);
+
+        } else {
+            mHolder.header.setText(data.getSchedule_no());
+
+        }
 
         initListener(position);
         setListenerForView();
@@ -293,9 +307,9 @@ public class ScheduleAdapter extends BaseAdapter {
                             + ampm);
 
                     Time actual_treatment_time = GlobalUtils.get_actual_working_hours(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(schedule.getOut_time()));
-                    schedule.setActual_treatment_time(String.format("%02d",actual_treatment_time.getHours())
+                    schedule.setActual_treatment_time(String.format("%02d", actual_treatment_time.getHours())
                             + ":"
-                            + String.format("%02d",actual_treatment_time.getMinutes()));
+                            + String.format("%02d", actual_treatment_time.getMinutes()));
                     schedule.setSchedule_no(GlobalUtils.SESSION_ENDED);
                     schedule.setActual_productivity(GlobalUtils.get_productivity(GlobalUtils.TOTAL_TREATMENT_TIME, GlobalUtils.convertTimeInMinutes(actual_treatment_time.getHours() + "", actual_treatment_time.getMinutes() + "")));
                     schedule.setActual_clockout_time(schedule.getOut_time());

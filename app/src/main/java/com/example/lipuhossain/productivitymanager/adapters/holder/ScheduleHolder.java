@@ -1,5 +1,6 @@
 package com.example.lipuhossain.productivitymanager.adapters.holder;
 
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,4 +22,7 @@ public class ScheduleHolder {
 
 
     public RelativeLayout break_layout = null;
+
+    public View divider_one = null;
+    public View divider_two = null;
 }

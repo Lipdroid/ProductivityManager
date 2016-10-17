@@ -6,9 +6,11 @@ import android.content.pm.ActivityInfo;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView mListSchedule = null;
     private ScheduleAdapter scheduleAdapter = null;
     private View stickyViewSpacer = null;
-    private RelativeLayout status_bar = null;
+    private LinearLayout status_bar = null;
 
 
     private TextView tv_target_treatment = null;
@@ -52,11 +54,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_actual_out_time = null;
     private TextView tv_actual_productivity = null;
     private TextView tv_target_productivity = null;
+    private TextView tv_total_treatment = null;
+
 
 
     // Database Helper
     private DatabaseHelper db = null;
 
+    private FrameLayout pro_frame = null;
     @Override
     protected void onResume() {
         super.onResume();
@@ -113,13 +118,15 @@ public class MainActivity extends AppCompatActivity {
         tv_actual_out_time = (TextView) findViewById(R.id.tv_actual_out_time);
         tv_actual_productivity = (TextView) findViewById(R.id.actual_product);
         tv_target_productivity = (TextView) findViewById(R.id.target_product);
+        tv_total_treatment =  (TextView) findViewById(R.id.tv_total_treatment);
 
+        pro_frame = (FrameLayout) findViewById(R.id.pro_frame);
 
         pager = (ViewPager) findViewById(R.id.date_pager);
         progress_target_productivity = (RingProgressBar) findViewById(R.id.estimated_progress);
         progress_actual_productivity = (RingProgressBar) findViewById(R.id.actual_progress);
         mListSchedule = (ListView) findViewById(R.id.schedule_list);
-        status_bar = (RelativeLayout) findViewById(R.id.rl_status);
+        status_bar = (LinearLayout) findViewById(R.id.rl_status);
 
 
         /* Inflate list header layout */
@@ -151,8 +158,11 @@ public class MainActivity extends AppCompatActivity {
                     pager.setY(Math.max(0, heroTopY + topY));
                     /* Set the image to scroll half of the amount that of ListView */
                     status_bar.setY(topY * 0.5f);
+
+
                 }
             }
+
         });
 
     }
@@ -334,9 +344,17 @@ public class MainActivity extends AppCompatActivity {
             int target_treatment_time = Integer.parseInt(GlobalUtils.TARGET_TREATMENT_TIME);
             int updated_target_hour = target_treatment_time / 60;
             int updated_target_minute = target_treatment_time % 60;
-            GlobalUtils.calculated_schedule.setTarget_treatment_time(String.format("%02d", updated_target_hour)
+            GlobalUtils.calculated_schedule.setTarget_treatment_time(String.format("%02d%2$s", updated_target_hour,"h")
                     + ":"
-                    + String.format("%02d", updated_target_minute));
+                    + String.format("%02d%2$s", updated_target_minute,"m"));
+
+
+            int total_treatment_time = Integer.parseInt(GlobalUtils.TOTAL_TREATMENT_TIME);
+            updated_target_hour = total_treatment_time / 60;
+            updated_target_minute = total_treatment_time % 60;
+            GlobalUtils.calculated_schedule.setTotal_treatment_time(String.format("%02d%2$s", updated_target_hour,"h")
+                    + ":"
+                    + String.format("%02d%2$s", updated_target_minute,"m"));
         }
 
 
@@ -353,9 +371,9 @@ public class MainActivity extends AppCompatActivity {
         if (minute != 0) {
             int updated_hour = minute / 60;
             int updated_minute = minute % 60;
-            GlobalUtils.calculated_schedule.setActual_treatment_time(String.format("%02d", updated_hour)
+            GlobalUtils.calculated_schedule.setActual_treatment_time(String.format("%02d%2$s", updated_hour,"h")
                     + ":"
-                    + String.format("%02d", updated_minute));
+                    + String.format("%02d%2$s", updated_minute,"m"));
             GlobalUtils.calculated_schedule.setActual_productivity(GlobalUtils.get_productivity(GlobalUtils.TOTAL_TREATMENT_TIME, minute + ""));
 
         }
@@ -402,6 +420,7 @@ public class MainActivity extends AppCompatActivity {
         tv_target_clock_out.setText(schedule.getTarget_clockout_time());
         tv_actual_treatment_time.setText(schedule.getActual_treatment_time());
         tv_actual_out_time.setText(schedule.getActual_clockout_time());
+        tv_total_treatment.setText(schedule.getTotal_treatment_time());
 
         if (schedule.getTarget_productivity() != null && !schedule.getTarget_productivity().equals("0")) {
             tv_target_productivity.setText("(" + schedule.getTarget_productivity() + "%)");

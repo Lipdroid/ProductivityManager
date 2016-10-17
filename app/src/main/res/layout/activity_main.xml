@@ -33,11 +33,11 @@
             android:textSize="20dp" />
 
         <ImageView
-            android:onClick="afterClickedEdit"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:layout_margin="11dp"
+            android:onClick="afterClickedEdit"
             android:src="@drawable/settings" />
     </RelativeLayout>
 
@@ -48,209 +48,269 @@
         android:layout_below="@+id/tool_bar">
 
         <RelativeLayout
-            android:id="@+id/rl_status"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="230dp"
             android:background="@color/colorPrimary"
-            >
+            android:orientation="vertical">
 
+
+            <LinearLayout
+                android:id="@+id/rl_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:weightSum="1">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginTop="1dp"
+                            android:text="GOAL"
+                            android:textColor="@color/common_white_1"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/target_product"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:text="(100%)"
+                            android:textColor="@color/common_yellow"
+                            android:textSize="10dp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                        android:id="@+id/estimated_progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        app:max="100"
+                        app:ringColor="@android:color/darker_gray"
+                        app:ringProgressColor="@color/common_yellow"
+                        app:ringWidth="7dp"
+                        app:style="STROKE"
+                        app:textColor="@color/common_white_1"
+                        app:textIsShow="true"
+                        app:textSize="30dp" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Treatment Patient Time:"
+                            android:textColor="@color/common_white_1"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_target_treatment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7:52"
+                            android:textColor="@color/common_yellow"
+                            android:textSize="16dp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Target Clock Out:"
+                            android:textColor="@color/common_white_1"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_target_clock_out"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4:52 pm"
+                            android:textColor="@color/common_yellow"
+                            android:textSize="16dp" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginTop="1dp"
+                            android:text="YOU"
+                            android:textColor="@color/common_white_1"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/actual_product"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:text="(100%)"
+                            android:textColor="@color/common_yellow"
+                            android:textSize="10dp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+
+                    <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                        android:id="@+id/actual_progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        app:max="100"
+                        app:ringColor="@android:color/darker_gray"
+                        app:ringProgressColor="@color/common_yellow"
+                        app:ringWidth="7dp"
+                        app:style="STROKE"
+                        app:textColor="@color/common_white_1"
+                        app:textIsShow="true"
+                        app:textSize="30dp" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your Patient Time:"
+                            android:textColor="@color/common_white_1"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_actual_treatment_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7:52"
+                            android:textColor="@color/common_yellow"
+                            android:textSize="16dp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your Clock Out:"
+                            android:textColor="@color/common_white_1"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_actual_out_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4:52 pm"
+                            android:textColor="@color/common_yellow"
+                            android:textSize="16dp" />
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="40dp"
-                android:orientation="vertical">
+                android:layout_below="@+id/rl_status"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
 
-                <io.netopen.hotbitmapgg.library.view.RingProgressBar
-                    android:id="@+id/estimated_progress"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:max="100"
-                    app:ringColor="@android:color/darker_gray"
-                    app:ringProgressColor="@color/common_yellow"
-                    app:ringWidth="7dp"
-                    app:style="STROKE"
-                    app:textColor="@color/common_white_1"
-                    app:textIsShow="true"
-                    app:textSize="30dp" />
+                    android:text="Treatment Patient Time:"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="16dp" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="1dp"
-                        android:text="Target"
-                        android:textColor="@color/common_white_1"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/target_product"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="5dp"
-                        android:text="(100%)"
-                        android:textColor="@color/common_yellow"
-                        android:textSize="10dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tv_total_treatment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Treatment:"
-                        android:textColor="@color/common_white_1"
-                        android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/tv_target_treatment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="7:52"
-                        android:textColor="@color/common_white_1"
-                        android:textSize="16dp" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Clock out:"
-                        android:textColor="@color/common_white_1"
-                        android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/tv_target_clock_out"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="4:52 pm"
-                        android:textColor="@color/common_white_1"
-                        android:textSize="16dp" />
-
-
-                </LinearLayout>
+                    android:text="7:52"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="16dp" />
 
             </LinearLayout>
 
-
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/pro_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="30dp"
-                android:orientation="vertical">
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="55dp"
+                android:paddingRight="15dp">
 
-
-                <io.netopen.hotbitmapgg.library.view.RingProgressBar
-                    android:id="@+id/actual_progress"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:max="100"
-                    app:ringColor="@android:color/darker_gray"
-                    app:ringProgressColor="@color/common_yellow"
-                    app:ringWidth="7dp"
-                    app:style="STROKE"
-                    app:textColor="@color/common_white_1"
-                    app:textIsShow="true"
-                    app:textSize="30dp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="1dp"
-                        android:text="Actual"
-                        android:textColor="@color/common_white_1"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/actual_product"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="5dp"
-                        android:text="(100%)"
-                        android:textColor="@color/common_yellow"
-                        android:textSize="10dp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Treatment:"
-                        android:textColor="@color/common_white_1"
-                        android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/tv_actual_treatment_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="7:52"
-                        android:textColor="@color/common_white_1"
-                        android:textSize="16dp" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Clock out:"
-                        android:textColor="@color/common_white_1"
-                        android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/tv_actual_out_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="4:52 pm"
-                        android:textColor="@color/common_white_1"
-                        android:textSize="16dp" />
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
+                    android:text="Productivity"
+                    android:textColor="@color/common_white_1"
+                    android:textSize="12dp" />
+            </FrameLayout>
 
         </RelativeLayout>
 
@@ -259,7 +319,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/date_pager"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:visibility="gone">
 
         </ListView>
 
@@ -267,7 +328,8 @@
             android:id="@+id/date_pager"
             android:layout_width="fill_parent"
             android:layout_height="69dp"
-            android:background="@color/common_white_1" />
+            android:background="@color/common_white_1"
+            android:visibility="visible" />
     </FrameLayout>
 
 </RelativeLayout>
