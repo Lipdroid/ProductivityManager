@@ -10,12 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.lipuhossain.productivitymanager.R;
 import com.example.lipuhossain.productivitymanager.constants.Constants;
 import com.example.lipuhossain.productivitymanager.customViews.SCCustomDialog;
 import com.example.lipuhossain.productivitymanager.interfaces.DialogForValueCallback;
+import com.example.lipuhossain.productivitymanager.interfaces.OptionDialogCallback;
 import com.example.lipuhossain.productivitymanager.interfaces.SCDialogCallback;
 import com.example.lipuhossain.productivitymanager.interfaces.SeachDialogCallback;
 import com.example.lipuhossain.productivitymanager.models.CustomDate;
@@ -584,7 +586,100 @@ public class GlobalUtils {
         infoDialog.show();
     }
 
+    public static void showOpdtionDialog(final Context context, final OptionDialogCallback dialogCallback) {
+        final SCCustomDialog infoDialog = new SCCustomDialog(context, R.style.CustomDialogTheme);
+        LayoutInflater inflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.dialog_options_menu, null);
 
+        new SCMultipleScreen(context);
+        SCMultipleScreen.resizeAllView((ViewGroup) v);
+
+        infoDialog.setContentView(v);
+
+        LinearLayout btnHistory = (LinearLayout) infoDialog.findViewById(R.id.btnHistory);
+        LinearLayout btnChangeTime = (LinearLayout) infoDialog.findViewById(R.id.btnChangeTime);
+        LinearLayout btnClear = (LinearLayout) infoDialog.findViewById(R.id.btnClear);
+        LinearLayout btnSave = (LinearLayout) infoDialog.findViewById(R.id.btnSave);
+        LinearLayout btnCancel = (LinearLayout) infoDialog.findViewById(R.id.btnCancel);
+
+
+        btnHistory.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                if (dialogCallback != null) {
+                    dialogCallback.onActionHistory();
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                if (dialogCallback != null) {
+                    dialogCallback.onActionClear();
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+        btnChangeTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                if (dialogCallback != null) {
+                    dialogCallback.onActionChangeTime();
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                if (dialogCallback != null) {
+                    dialogCallback.onActionSave();
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                if (dialogCallback != null) {
+                    dialogCallback.onActionCancel();
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+
+
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                if (dialogCallback != null) {
+                    dialogCallback.onActionCancel();
+                }
+                infoDialog.dismiss();
+            }
+        });
+
+        infoDialog.show();
+    }
 
     public static void showDialogSearch(final Context context,final ArrayList<String> datelist,final SeachDialogCallback dialogCallback) {
         final SCCustomDialog infoDialog = new SCCustomDialog(context, R.style.CustomDialogTheme);

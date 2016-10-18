@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/dialog_main"
+            android:layout_width="937px"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/common_dialog_bg">
+
+            <LinearLayout
+                android:id="@+id/title_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/et_productivity"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40px"
+                    android:layout_marginLeft="84px"
+                    android:layout_marginRight="84px"
+                    android:layout_marginTop="40px"
+                    android:tag="51"
+                    android:text="OPTIONS"
+                    android:textColor="@color/main_dark"
+                    android:textSize="51px"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_time"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/et_productivity"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/btnHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/dialog_item_pressed">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="40px"
+                            android:layout_marginLeft="84px"
+                            android:layout_marginRight="84px"
+                            android:layout_marginTop="40px"
+                            android:tag="51"
+                            android:text="History"
+                            android:textColor="@color/main_dark"
+                            android:textSize="51px"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/common_gray" />
+
+                    <LinearLayout
+                        android:id="@+id/btnChangeTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/dialog_item_pressed">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="40px"
+                            android:layout_marginLeft="84px"
+                            android:layout_marginRight="84px"
+                            android:layout_marginTop="40px"
+                            android:tag="51"
+                            android:text="Add/Minus TIme"
+                            android:textColor="@color/main_dark"
+                            android:textSize="51px"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/common_gray" />
+
+                    <LinearLayout
+                        android:id="@+id/btnClear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/dialog_item_pressed">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="40px"
+                            android:layout_marginLeft="84px"
+                            android:layout_marginRight="84px"
+                            android:layout_marginTop="40px"
+                            android:tag="51"
+                            android:text="Clear"
+                            android:textColor="@color/main_dark"
+                            android:textSize="51px"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/common_gray" />
+
+                    <LinearLayout
+                        android:id="@+id/btnSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/dialog_item_pressed">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="40px"
+                            android:layout_marginLeft="84px"
+                            android:layout_marginRight="84px"
+                            android:layout_marginTop="40px"
+                            android:tag="51"
+                            android:text="Save"
+                            android:textColor="@color/main_dark"
+                            android:textSize="51px"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/common_gray" />
+
+                    <LinearLayout
+                        android:id="@+id/btnCancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/dialog_item_pressed">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="40px"
+                            android:layout_marginLeft="84px"
+                            android:layout_marginRight="84px"
+                            android:layout_marginTop="40px"
+                            android:tag="51"
+                            android:text="Cancel"
+                            android:textColor="@color/main_dark"
+                            android:textSize="51px"
+                            android:visibility="visible" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

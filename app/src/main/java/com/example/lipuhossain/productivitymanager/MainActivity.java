@@ -1,5 +1,6 @@
 package com.example.lipuhossain.productivitymanager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -21,6 +22,7 @@ import com.example.lipuhossain.productivitymanager.adapters.ScheduleAdapter;
 import com.example.lipuhossain.productivitymanager.constants.Constants;
 import com.example.lipuhossain.productivitymanager.database.DatabaseHelper;
 import com.example.lipuhossain.productivitymanager.interfaces.DialogForValueCallback;
+import com.example.lipuhossain.productivitymanager.interfaces.OptionDialogCallback;
 import com.example.lipuhossain.productivitymanager.interfaces.SCDialogCallback;
 import com.example.lipuhossain.productivitymanager.models.CustomDate;
 import com.example.lipuhossain.productivitymanager.models.Schedule;
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_target_productivity = null;
     private TextView tv_total_treatment = null;
 
-
+    private Context mContext = null;
 
     // Database Helper
     private DatabaseHelper db = null;
@@ -466,35 +468,64 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void afterClickedEdit(View view) {
-        if (GlobalUtils.TARGET_TREATMENT_TIME.equals("0")) {
-            GlobalUtils.showInfoDialog(this, "Error", "You have not entered your total treatment time yet", "OK", new SCDialogCallback() {
-                @Override
-                public void onAction1() {
+        //i have to implement a popup for options (History,clear,addtime,save)
+        GlobalUtils.showOpdtionDialog(this, new OptionDialogCallback() {
+            @Override
+            public void onActionHistory() {
+                Intent intent = new Intent(MainActivity.this,HistoryActivity.class);
+                startActivity(intent);
+            }
 
+            @Override
+            public void onActionChangeTime() {
+                if (GlobalUtils.TARGET_TREATMENT_TIME.equals("0")) {
+                    GlobalUtils.showInfoDialog(mContext, "Error", "You have not entered your total treatment time yet", "OK", new SCDialogCallback() {
+                        @Override
+                        public void onAction1() {
+
+                        }
+
+                        @Override
+                        public void onAction2() {
+
+                        }
+
+                        @Override
+                        public void onAction3() {
+
+                        }
+
+                        @Override
+                        public void onAction4() {
+
+                        }
+                    });
+                } else {
+                    aftererClickTarget();
                 }
+            }
 
-                @Override
-                public void onAction2() {
+            @Override
+            public void onActionClear() {
 
-                }
+            }
 
-                @Override
-                public void onAction3() {
+            @Override
+            public void onActionSave() {
 
-                }
+            }
 
-                @Override
-                public void onAction4() {
+            @Override
+            public void onActionCancel() {
 
-                }
-            });
-        } else {
-            aftererClickTarget();
-        }
+            }
+        });
+
+
     }
 
     public void afterClickHistory(View view) {
-        Intent intent = new Intent(MainActivity.this,HistoryActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(MainActivity.this,HistoryActivity.class);
+//        startActivity(intent);
     }
 }

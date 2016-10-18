@@ -20,6 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_margin="11dp"
             android:onClick="afterClickHistory"
+            android:visibility="gone"
             android:src="@drawable/history" />
 
 
@@ -38,7 +39,7 @@
             android:layout_alignParentRight="true"
             android:layout_margin="11dp"
             android:onClick="afterClickedEdit"
-            android:src="@drawable/settings" />
+            android:src="@drawable/option_icon_right" />
     </RelativeLayout>
 
     <FrameLayout
