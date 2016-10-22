@@ -21,34 +21,41 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Intime"
                 android:layout_alignParentLeft="true"
                 android:layout_margin="10dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="OutTime"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="10dp"
-                />
+                android:text="Intime"
+                android:textSize="20dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="10dp"                android:text="OutTime"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="200dp"
+                android:layout_marginTop="10dp"
                 android:text="Break"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_margin="10dp"
-                />
+                android:text="Hours"
+                android:textSize="20dp" />
 
         </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/common_gray" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,30 +66,40 @@
                 android:id="@+id/tvintime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="13-2-2016"
                 android:layout_alignParentLeft="true"
                 android:layout_margin="10dp"
-                />
+                android:text="13-2-2016"
+                android:textSize="20dp" />
+
             <TextView
                 android:id="@+id/tvouttime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="10dp"
                 android:text="80%"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="10dp"
-                />
+                android:layout_toRightOf="@+id/tvintime"
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/tvbreak"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/tvouttime"
                 android:text="90%"
-                android:layout_alignParentRight="true"
-                android:layout_margin="10dp"
-                />
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/tvWorked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="25dp"
+                android:text="90%"
+                android:layout_toRightOf="@+id/tvbreak"
+                android:textSize="20dp" />
 
         </RelativeLayout>
     </LinearLayout>

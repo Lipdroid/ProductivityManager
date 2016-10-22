@@ -79,6 +79,8 @@ public class ScheduleAdapter extends BaseAdapter {
             mHolder.tvBreaktime = (TextView) convertView.findViewById(R.id.breaktime);
             mHolder.header = (TextView) convertView.findViewById(R.id.header_text);
             mHolder.break_layout = (RelativeLayout) convertView.findViewById(R.id.rl_break);
+            mHolder.tv_label_patient_time = (TextView) convertView.findViewById(R.id.tv_label_patient_time);
+
 
             mHolder.divider_one = (View) convertView.findViewById(R.id.divider_one);
             mHolder.divider_two = (View) convertView.findViewById(R.id.divider_two);
@@ -98,18 +100,31 @@ public class ScheduleAdapter extends BaseAdapter {
         } else {
             mHolder.time_layout.setVisibility(View.VISIBLE);
         }
-        if (data.getBreak_time() != null && data.getBreak_time().equals("00:00")) {
+        if (data.getWorked_in_that_session() != null && data.getWorked_in_that_session().equals("00:00")) {
             mHolder.break_layout.setVisibility(View.GONE);
             mHolder.divider_two.setVisibility(View.GONE);
-        } else {
+        } else if (data.getWorked_in_that_session() != null && !data.getWorked_in_that_session().equals("00:00")) {
             mHolder.break_layout.setVisibility(View.VISIBLE);
             mHolder.divider_two.setVisibility(View.VISIBLE);
+
+            mHolder.tv_label_patient_time.setText("Your Patient Time " + (position + 1));
+            Time t = GlobalUtils.get_time(data.getWorked_in_that_session());
+            mHolder.tvBreaktime.setText(GlobalUtils.convert_time_in_hhmm_format(t.getHours() + "", t.getMinutes() + ""));
+
+
         }
+
+//        if (data.getBreak_time() != null && data.getBreak_time().equals("00:00")) {
+//            mHolder.break_layout.setVisibility(View.GONE);
+//            mHolder.divider_two.setVisibility(View.GONE);
+//        } else {
+//            mHolder.break_layout.setVisibility(View.VISIBLE);
+//            mHolder.divider_two.setVisibility(View.VISIBLE);
+//        }
 
         mHolder.header.setText(data.getSchedule_no());
         mHolder.tvIntime.setText(data.getIn_time());
         mHolder.tvOuttime.setText(data.getOut_time());
-        mHolder.tvBreaktime.setText(data.getBreak_time());
         if (data.getSchedule_no().equals(GlobalUtils.SESSION_ENDED)) {
             mHolder.main_btn.setVisibility(View.GONE);
 
@@ -174,6 +189,7 @@ public class ScheduleAdapter extends BaseAdapter {
 
                                     schedule.setOut_time("00:00");
                                     schedule.setBreak_time("00:00");
+                                    schedule.setWorked_in_that_session("00:00");
                                     schedule.setSchedule_no(GlobalUtils.CLOCK_OUT);
                                     schedule.setTarget_productivity(GlobalUtils.TARGET_PRODUCTIVITY);
                                     schedule.setTotal_treatment_time(GlobalUtils.TOTAL_TREATMENT_TIME);
@@ -212,7 +228,6 @@ public class ScheduleAdapter extends BaseAdapter {
                     TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-                            GlobalUtils.no_counting = false;
 
                             schedule = mListData.get(position);
                             schedule.setDate(GlobalUtils.getCurrentDate().getFormattedDate());
@@ -226,28 +241,43 @@ public class ScheduleAdapter extends BaseAdapter {
                                     hourOfDay += 12;
                                 ampm = "AM";
                             }
-                            schedule.setIn_time(String.format("%02d", hourOfDay)
+
+                            String intime = String.format("%02d", hourOfDay)
                                     + ":"
                                     + String.format("%02d", minute)
                                     + " "
-                                    + ampm);
-                            schedule.setOut_time("00:00");
-                            schedule.setBreak_time("00:00");
-                            schedule.setSchedule_no(GlobalUtils.CLOCK_OUT);
-                            schedule.setTarget_productivity(GlobalUtils.TARGET_PRODUCTIVITY);
-                            schedule.setTotal_treatment_time(GlobalUtils.TOTAL_TREATMENT_TIME);
-                            schedule.setTarget_treatment_time(GlobalUtils.get_target_treatment_hours(GlobalUtils.TARGET_PRODUCTIVITY, GlobalUtils.TOTAL_TREATMENT_TIME));
-
-                            schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
+                                    + ampm;
                             Schedule pre_sch = mListData.get(position - 1);
-                            String out = pre_sch.getOut_time();
-                            Time break_time = GlobalUtils.get_break(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(out));
-                            pre_sch.setBreak_time(String.format("%02d", break_time.getHours()) + ":" + String.format("%02d", break_time.getMinutes()));
-                            schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(pre_sch.getTarget_clockout_time()), GlobalUtils.convertTimeInMinutes(GlobalUtils.get_time(pre_sch.getBreak_time() + " NO").getHours() + "", GlobalUtils.get_time(pre_sch.getBreak_time() + " NO").getMinutes() + "")));
+
+                            if (!GlobalUtils.check_conflict(GlobalUtils.get_time(intime), GlobalUtils.get_time(pre_sch.getOut_time()))) {
+                                Log.e("Conflicted", "Conflicted");
+                                GlobalUtils.showInfoDialog(mContext, "Error", "Your entered time conflicted other times" +
+                                        ",Please enter a non conflicted value", "OK", null);
+                                GlobalUtils.no_counting = true;
+                            }else {
+                                GlobalUtils.no_counting = false;
+
+                                schedule.setIn_time(intime);
+                                schedule.setOut_time("00:00");
+                                schedule.setBreak_time("00:00");
+                                schedule.setWorked_in_that_session("00:00");
+                                schedule.setSchedule_no(GlobalUtils.CLOCK_OUT);
+                                schedule.setTarget_productivity(GlobalUtils.TARGET_PRODUCTIVITY);
+                                schedule.setTotal_treatment_time(GlobalUtils.TOTAL_TREATMENT_TIME);
+                                schedule.setTarget_treatment_time(GlobalUtils.get_target_treatment_hours(GlobalUtils.TARGET_PRODUCTIVITY, GlobalUtils.TOTAL_TREATMENT_TIME));
+
+                                schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
+
+                                String out = pre_sch.getOut_time();
+                                Time break_time = GlobalUtils.get_break(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(out));
+                                pre_sch.setBreak_time(String.format("%02d", break_time.getHours()) + ":" + String.format("%02d", break_time.getMinutes()));
+
+                                schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(pre_sch.getTarget_clockout_time()), GlobalUtils.convertTimeInMinutes(GlobalUtils.get_time(pre_sch.getBreak_time() + " NO").getHours() + "", GlobalUtils.get_time(pre_sch.getBreak_time() + " NO").getMinutes() + "")));
 
 
-                            ((MainActivity) mContext).update_db(pre_sch);
-                            ((MainActivity) mContext).addItemToMainScheduleList(schedule);
+                                ((MainActivity) mContext).update_db(pre_sch);
+                                ((MainActivity) mContext).addItemToMainScheduleList(schedule);
+                            }
 
                         }
                     }, now.get(Calendar.HOUR), now.get(Calendar.MINUTE), false);
@@ -300,22 +330,40 @@ public class ScheduleAdapter extends BaseAdapter {
                         ampm = "AM";
                     }
                     schedule = mListData.get(position);
-                    schedule.setOut_time(String.format("%02d", hourOfDay)
+
+                    String outtime = String.format("%02d", hourOfDay)
                             + ":"
                             + String.format("%02d", minute)
                             + " "
-                            + ampm);
+                            + ampm;
 
-                    Time actual_treatment_time = GlobalUtils.get_actual_working_hours(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(schedule.getOut_time()));
-                    schedule.setActual_treatment_time(String.format("%02d", actual_treatment_time.getHours())
-                            + ":"
-                            + String.format("%02d", actual_treatment_time.getMinutes()));
-                    schedule.setSchedule_no(GlobalUtils.SESSION_ENDED);
-                    schedule.setActual_productivity(GlobalUtils.get_productivity(GlobalUtils.TOTAL_TREATMENT_TIME, GlobalUtils.convertTimeInMinutes(actual_treatment_time.getHours() + "", actual_treatment_time.getMinutes() + "")));
-                    schedule.setActual_clockout_time(schedule.getOut_time());
+                    if (!GlobalUtils.check_conflict(GlobalUtils.get_time(outtime), GlobalUtils.get_time(schedule.getIn_time()))) {
+                        Log.e("Conflicted", "Conflicted");
+                        GlobalUtils.showInfoDialog(mContext, "Error", "Your entered time conflicted other times" +
+                                ",Please enter a non conflicted value", "OK", null);
+                    }else {
 
-                    ((MainActivity) mContext).updateItemToMainScheduleList(schedule);
-                    GlobalUtils.no_counting = true;
+                        schedule.setOut_time(outtime);
+
+                        Time working_hours = GlobalUtils.get_worked_in_that_session(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(schedule.getOut_time()));
+
+                        schedule.setWorked_in_that_session(String.format("%02d", working_hours.getHours())
+                                + ":"
+                                + String.format("%02d", working_hours.getMinutes())
+                                + " "
+                                + "N/A");
+
+                        Time actual_treatment_time = GlobalUtils.get_actual_working_hours(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(schedule.getOut_time()));
+                        schedule.setActual_treatment_time(String.format("%02d", actual_treatment_time.getHours())
+                                + ":"
+                                + String.format("%02d", actual_treatment_time.getMinutes()));
+                        schedule.setSchedule_no(GlobalUtils.SESSION_ENDED);
+                        schedule.setActual_productivity(GlobalUtils.get_productivity(GlobalUtils.TOTAL_TREATMENT_TIME, GlobalUtils.convertTimeInMinutes(actual_treatment_time.getHours() + "", actual_treatment_time.getMinutes() + "")));
+                        schedule.setActual_clockout_time(schedule.getOut_time());
+
+                        ((MainActivity) mContext).updateItemToMainScheduleList(schedule);
+                        GlobalUtils.no_counting = true;
+                    }
 
 
                 }

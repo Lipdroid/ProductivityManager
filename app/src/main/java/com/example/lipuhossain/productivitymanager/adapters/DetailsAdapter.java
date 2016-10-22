@@ -57,6 +57,7 @@ public class DetailsAdapter extends BaseAdapter {
             mHolder.tvDate = (TextView) convertView.findViewById(R.id.tvintime);
             mHolder.tvTarget = (TextView) convertView.findViewById(R.id.tvouttime);
             mHolder.tvActual = (TextView) convertView.findViewById(R.id.tvbreak);
+            mHolder.tvWorked = (TextView) convertView.findViewById(R.id.tvWorked);
 
             convertView.setTag(mHolder);
         } else {
@@ -68,6 +69,7 @@ public class DetailsAdapter extends BaseAdapter {
         mHolder.tvDate.setText(data.getIn_time());
         mHolder.tvTarget.setText(data.getOut_time());
         mHolder.tvActual.setText(data.getBreak_time());
+        mHolder.tvWorked.setText(data.getWorked_in_that_session().substring(0,5));
 
 
         return convertView;

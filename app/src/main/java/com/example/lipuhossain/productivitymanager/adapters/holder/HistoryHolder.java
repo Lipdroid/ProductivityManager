@@ -14,4 +14,5 @@ public class HistoryHolder {
     public TextView tvActual = null;
     public LinearLayout main = null;
 
+    public TextView tvWorked = null;
 }

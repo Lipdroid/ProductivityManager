@@ -45,6 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TAG_ACTUAL_CLOCKOUT_TIME = "actual_clockout_time";
     private static final String KEY_TAG_DATE = "date";
 
+    private static final String KEY_TAG_WORKED_IN_THAT_SESSION = "working_hour";
+
 
     // Tag table create statement
     private static final String CREATE_TABLE_SCHEDULE = "CREATE TABLE " + TABLE_SCHEDULE
@@ -60,7 +62,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_TAG_ACTUAL_PRODUCTIVITY + " TEXT,"
             + KEY_TAG_TARGET_CLOCKOUT_TIME + " TEXT,"
             + KEY_TAG_ACTUAL_CLOCKOUT_TIME + " TEXT,"
-            + KEY_TAG_DATE + " TEXT"
+            + KEY_TAG_DATE + " TEXT,"
+            + KEY_TAG_WORKED_IN_THAT_SESSION + " TEXT"
             + ")";
 
     public DatabaseHelper(Context context) {
@@ -102,7 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TAG_TARGET_CLOCKOUT_TIME, schedule.getTarget_clockout_time());
         values.put(KEY_TAG_ACTUAL_CLOCKOUT_TIME, schedule.getActual_clockout_time());
         values.put(KEY_TAG_DATE, schedule.getDate());
-
+        values.put(KEY_TAG_WORKED_IN_THAT_SESSION, schedule.getWorked_in_that_session());
         // insert row
         long schedule_id = db.insert(TABLE_SCHEDULE, null, values);
 
@@ -141,7 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         schedule.setActual_productivity(c.getString(c.getColumnIndex(KEY_TAG_ACTUAL_PRODUCTIVITY)));
         schedule.setTarget_clockout_time(c.getString(c.getColumnIndex(KEY_TAG_TARGET_CLOCKOUT_TIME)));
         schedule.setActual_clockout_time(c.getString(c.getColumnIndex(KEY_TAG_ACTUAL_CLOCKOUT_TIME)));
-
+        schedule.setWorked_in_that_session(c.getString(c.getColumnIndex(KEY_TAG_WORKED_IN_THAT_SESSION)));
         return schedule;
     }
 
@@ -175,7 +178,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 schedule.setActual_productivity(c.getString(c.getColumnIndex(KEY_TAG_ACTUAL_PRODUCTIVITY)));
                 schedule.setTarget_clockout_time(c.getString(c.getColumnIndex(KEY_TAG_TARGET_CLOCKOUT_TIME)));
                 schedule.setActual_clockout_time(c.getString(c.getColumnIndex(KEY_TAG_ACTUAL_CLOCKOUT_TIME)));
-
+                schedule.setWorked_in_that_session(c.getString(c.getColumnIndex(KEY_TAG_WORKED_IN_THAT_SESSION)));
                 // adding to todo list
                 schedules.add(schedule);
             } while (c.moveToNext());
@@ -191,9 +194,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Schedule> getAllSchedulesByDate(String date) {
         ArrayList<Schedule> schedules = new ArrayList<Schedule>();
 
-        String[] columns = { "*" };
+        String[] columns = {"*"};
         String selection = KEY_TAG_DATE + " =?";
-        String[] selectionArgs = { date };
+        String[] selectionArgs = {date};
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(TABLE_SCHEDULE, columns, selection, selectionArgs, null, null, null, null);
@@ -216,6 +219,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 schedule.setActual_productivity(c.getString(c.getColumnIndex(KEY_TAG_ACTUAL_PRODUCTIVITY)));
                 schedule.setTarget_clockout_time(c.getString(c.getColumnIndex(KEY_TAG_TARGET_CLOCKOUT_TIME)));
                 schedule.setActual_clockout_time(c.getString(c.getColumnIndex(KEY_TAG_ACTUAL_CLOCKOUT_TIME)));
+                schedule.setWorked_in_that_session(c.getString(c.getColumnIndex(KEY_TAG_WORKED_IN_THAT_SESSION)));
 
                 // adding to todo list
                 schedules.add(schedule);
@@ -244,7 +248,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TAG_TARGET_CLOCKOUT_TIME, schedule.getTarget_clockout_time());
         values.put(KEY_TAG_ACTUAL_CLOCKOUT_TIME, schedule.getActual_clockout_time());
         values.put(KEY_TAG_DATE, schedule.getDate());
-
+        values.put(KEY_TAG_WORKED_IN_THAT_SESSION, schedule.getWorked_in_that_session());
         // updating row
         return db.update(TABLE_SCHEDULE, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(schedule.getId())});
@@ -271,9 +275,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean CheckIsDataAlreadyInDBorNot(String date) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String[] columns = { "*" };
+        String[] columns = {"*"};
         String selection = KEY_TAG_DATE + " =?";
-        String[] selectionArgs = { date };
+        String[] selectionArgs = {date};
         String limit = "1";
 
         Cursor cursor = db.query(TABLE_SCHEDULE, columns, selection, selectionArgs, null, null, null, limit);

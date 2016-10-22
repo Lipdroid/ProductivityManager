@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper db = null;
 
     private FrameLayout pro_frame = null;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         tv_actual_out_time = (TextView) findViewById(R.id.tv_actual_out_time);
         tv_actual_productivity = (TextView) findViewById(R.id.actual_product);
         tv_target_productivity = (TextView) findViewById(R.id.target_product);
-        tv_total_treatment =  (TextView) findViewById(R.id.tv_total_treatment);
+        tv_total_treatment = (TextView) findViewById(R.id.tv_total_treatment);
 
         pro_frame = (FrameLayout) findViewById(R.id.pro_frame);
 
@@ -225,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString(Constants.TARGET_TREATMENT_TIME, schedule.getTarget_treatment_time());
                 editor.commit();
                 if (schedule.getBreak_time() != null && !schedule.getBreak_time().equals("00:00")) {
-                    Time break_time = GlobalUtils.get_time(schedule.getBreak_time()+" NO");
+                    Time break_time = GlobalUtils.get_time(schedule.getBreak_time() + " N/A");
                     Time t = GlobalUtils.get_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
                     String get_clock_out = GlobalUtils.get_target_clockout(t, GlobalUtils.convertTimeInMinutes(break_time.getHours() + "", break_time.getMinutes() + ""));
                     schedule.setTarget_clockout_time(get_clock_out);
@@ -311,6 +312,7 @@ public class MainActivity extends AppCompatActivity {
                 a_schedule.setActual_productivity(schedule.getActual_productivity());
                 a_schedule.setTarget_clockout_time(schedule.getTarget_clockout_time());
                 a_schedule.setActual_clockout_time(schedule.getActual_clockout_time());
+                a_schedule.setWorked_in_that_session(schedule.getWorked_in_that_session());
 
                 update_db(a_schedule);
             }
@@ -346,17 +348,17 @@ public class MainActivity extends AppCompatActivity {
             int target_treatment_time = Integer.parseInt(GlobalUtils.TARGET_TREATMENT_TIME);
             int updated_target_hour = target_treatment_time / 60;
             int updated_target_minute = target_treatment_time % 60;
-            GlobalUtils.calculated_schedule.setTarget_treatment_time(String.format("%02d%2$s", updated_target_hour,"h")
+            GlobalUtils.calculated_schedule.setTarget_treatment_time(String.format("%02d%2$s", updated_target_hour, "h")
                     + ":"
-                    + String.format("%02d%2$s", updated_target_minute,"m"));
+                    + String.format("%02d%2$s", updated_target_minute, "m"));
 
 
             int total_treatment_time = Integer.parseInt(GlobalUtils.TOTAL_TREATMENT_TIME);
             updated_target_hour = total_treatment_time / 60;
             updated_target_minute = total_treatment_time % 60;
-            GlobalUtils.calculated_schedule.setTotal_treatment_time(String.format("%02d%2$s", updated_target_hour,"h")
+            GlobalUtils.calculated_schedule.setTotal_treatment_time(String.format("%02d%2$s", updated_target_hour, "h")
                     + ":"
-                    + String.format("%02d%2$s", updated_target_minute,"m"));
+                    + String.format("%02d%2$s", updated_target_minute, "m"));
         }
 
 
@@ -365,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
         for (Schedule schedule : mListScheduleData
                 ) {
             if (schedule.getActual_treatment_time() != null) {
-                Time t = GlobalUtils.get_time(schedule.getActual_treatment_time() + " NO");
+                Time t = GlobalUtils.get_time(schedule.getActual_treatment_time() + " N/A");
                 minute += Integer.parseInt(GlobalUtils.convertTimeInMinutes(t.getHours() + "", t.getMinutes() + ""));
             }
         }
@@ -373,9 +375,9 @@ public class MainActivity extends AppCompatActivity {
         if (minute != 0) {
             int updated_hour = minute / 60;
             int updated_minute = minute % 60;
-            GlobalUtils.calculated_schedule.setActual_treatment_time(String.format("%02d%2$s", updated_hour,"h")
+            GlobalUtils.calculated_schedule.setActual_treatment_time(String.format("%02d%2$s", updated_hour, "h")
                     + ":"
-                    + String.format("%02d%2$s", updated_minute,"m"));
+                    + String.format("%02d%2$s", updated_minute, "m"));
             GlobalUtils.calculated_schedule.setActual_productivity(GlobalUtils.get_productivity(GlobalUtils.TOTAL_TREATMENT_TIME, minute + ""));
 
         }
@@ -450,6 +452,8 @@ public class MainActivity extends AppCompatActivity {
         tv_target_clock_out.setText("00:00");
         tv_actual_treatment_time.setText("00:00");
         tv_actual_out_time.setText("00:00");
+        tv_total_treatment.setText("00:00");
+
 
         GlobalUtils.resetProgress(progress_target_productivity);
         GlobalUtils.resetProgress(progress_actual_productivity);
@@ -472,7 +476,7 @@ public class MainActivity extends AppCompatActivity {
         GlobalUtils.showOpdtionDialog(this, new OptionDialogCallback() {
             @Override
             public void onActionHistory() {
-                Intent intent = new Intent(MainActivity.this,HistoryActivity.class);
+                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
                 startActivity(intent);
             }
 

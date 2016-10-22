@@ -18,6 +18,15 @@ public class Schedule {
     private String target_clockout_time = null;
     private String actual_clockout_time = null;
     private String schedule_no = null;
+    private String worked_in_that_session = null;
+
+    public String getWorked_in_that_session() {
+        return worked_in_that_session;
+    }
+
+    public void setWorked_in_that_session(String worked_in_that_session) {
+        this.worked_in_that_session = worked_in_that_session;
+    }
 
     public String getSchedule_no() {
         return schedule_no;

@@ -41,20 +41,20 @@ public class GlobalUtils {
     public static String TARGET_TREATMENT_TIME = "0";
     public static String TARGET_PRODUCTIVITY = "";
     public static String TOTAL_TREATMENT_TIME = "0";
-    public static  boolean no_counting = true;
+    public static boolean no_counting = true;
     public static String CLOCK_IN = "Clock In";
     public static String CLOCK_OUT = "Clock Out";
     public static String SESSION_ENDED = "Session ended";
     public static Schedule calculated_schedule = new Schedule();
 
 
-    public static SharedPreferences preferences(Context mContext){
+    public static SharedPreferences preferences(Context mContext) {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.PREFS_NAME, mContext.MODE_PRIVATE);
-        return  prefs;
+        return prefs;
     }
 
-    public static String convertTimeInMinutes(String hours,String minutes){
-        return Integer.toString((Integer.parseInt(hours)*60)+Integer.parseInt(minutes));
+    public static String convertTimeInMinutes(String hours, String minutes) {
+        return Integer.toString((Integer.parseInt(hours) * 60) + Integer.parseInt(minutes));
     }
 
 
@@ -110,7 +110,7 @@ public class GlobalUtils {
             tvBody.setVisibility(View.GONE);
         } else {
 
-                tvBody.setText(body);
+            tvBody.setText(body);
 
         }
 
@@ -148,7 +148,7 @@ public class GlobalUtils {
     }
 
 
-    public static CustomDate getCurrentDate(){
+    public static CustomDate getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
 
@@ -167,13 +167,13 @@ public class GlobalUtils {
     }
 
 
-    public static String getCurrentTime(){
+    public static String getCurrentTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
 
         String ampm = DateUtils.getAMPMString(calendar.get(Calendar.AM_PM));
 
-        int hourOfDay =calendar.get(Calendar.HOUR);
+        int hourOfDay = calendar.get(Calendar.HOUR);
         if (hourOfDay >= 12) {
             if (hourOfDay != 12)
                 hourOfDay -= 12;
@@ -182,11 +182,11 @@ public class GlobalUtils {
                 hourOfDay += 12;
         }
 
-        String date = String.format("%02d",hourOfDay )
+        String date = String.format("%02d", hourOfDay)
                 + ":"
-                + String.format("%02d",calendar.get(Calendar.MINUTE))
-                +" "
-                +ampm;
+                + String.format("%02d", calendar.get(Calendar.MINUTE))
+                + " "
+                + ampm;
 
         return date;
 
@@ -242,23 +242,23 @@ public class GlobalUtils {
         return "";
     }
 
-    public static void showProgress(final RingProgressBar progress, final int value){
+    public static void showProgress(final RingProgressBar progress, final int value) {
         final Thread t = new Thread() {
             @Override
             public void run() {
-                if(value <= 100){
-                int jumpTime = progress.getProgress();
+                if (value <= 100) {
+                    int jumpTime = progress.getProgress();
 
-                while(jumpTime < value) {
-                    try {
-                        sleep(35);
-                        jumpTime += 1;
-                        progress.setProgress(jumpTime);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    while (jumpTime < value) {
+                        try {
+                            sleep(35);
+                            jumpTime += 1;
+                            progress.setProgress(jumpTime);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                     }
-                }
                 }
             }
         };
@@ -318,13 +318,12 @@ public class GlobalUtils {
             public void run() {
                 int jumpTime = value;
 
-                while(jumpTime != 0) {
+                while (jumpTime != 0) {
                     try {
                         sleep(35);
                         jumpTime -= 1;
                         progress.setProgress(jumpTime);
-                    }
-                    catch (InterruptedException e) {
+                    } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
@@ -333,30 +332,31 @@ public class GlobalUtils {
         };
         t.start();
     }
+
     //Calculate productivity
-    public static String get_productivity(String total_treatment_hours,String actual_treatment_hours){
+    public static String get_productivity(String total_treatment_hours, String actual_treatment_hours) {
         Double productivity = 0.0;
         try {
-            productivity = ((Double.parseDouble(total_treatment_hours)/Double.parseDouble(actual_treatment_hours))*100);
+            productivity = ((Double.parseDouble(total_treatment_hours) / Double.parseDouble(actual_treatment_hours)) * 100);
             int value = productivity.intValue();
-            return value+"";
-        }catch (Exception e){
+            return value + "";
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return productivity+"";
+        return productivity + "";
 
 
     }
 
     //Calculate how long have to stay in the office
-    public static String get_target_treatment_hours(String productivity,String total_treatment_hours){
-        Double  actual_treatment_hours = ((Double.parseDouble(total_treatment_hours)/Double.parseDouble(productivity))*100);
+    public static String get_target_treatment_hours(String productivity, String total_treatment_hours) {
+        Double actual_treatment_hours = ((Double.parseDouble(total_treatment_hours) / Double.parseDouble(productivity)) * 100);
         int value = actual_treatment_hours.intValue();
-        return value+"";
+        return value + "";
     }
 
     //convert String into time
-    public static Date convert_string_time_into_original_time(String hhmmaa){
+    public static Date convert_string_time_into_original_time(String hhmmaa) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm aa");
         Date convertedDate = new Date();
         try {
@@ -369,24 +369,24 @@ public class GlobalUtils {
     }
 
     //convert minutes into hour and minute
-    public static String convert_minutes_to_hours(String minutess){
+    public static String convert_minutes_to_hours(String minutess) {
         int hours = Integer.parseInt(minutess) / 60; //since both are ints, you get an int
         int minutes = Integer.parseInt(minutess) % 60;
         System.out.printf("%d:%02d", hours, minutes);
-        return hours+":"+minutes;
+        return hours + ":" + minutes;
     }
 
 
     //1 minute = 60 seconds
     //1 hour = 60 x 60 = 3600
     //1 day = 3600 x 24 = 86400
-    public static void printDifference(Date startDate, Date endDate){
+    public static void printDifference(Date startDate, Date endDate) {
 
         //milliseconds
         long different = endDate.getTime() - startDate.getTime();
 
         System.out.println("startDate : " + startDate);
-        System.out.println("endDate : "+ endDate);
+        System.out.println("endDate : " + endDate);
         System.out.println("different : " + different);
 
         long secondsInMilli = 1000;
@@ -412,8 +412,8 @@ public class GlobalUtils {
 
     }
 
-    public static String add_hours_to_time(String starting,String add){
-         Date date = convert_string_time_into_original_time(starting);
+    public static String add_hours_to_time(String starting, String add) {
+        Date date = convert_string_time_into_original_time(starting);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MINUTE, Integer.parseInt(add));
@@ -421,14 +421,14 @@ public class GlobalUtils {
         int hours = calendar.get(Calendar.HOUR);
         int minutes = calendar.get(Calendar.MINUTE);
 
-        if(hours >= 12){
+        if (hours >= 12) {
             if (hours != 12)
                 hours -= 12;
-        }else{
+        } else {
             if (hours == 0)
                 hours += 12;
         }
-        return  hours+":"+minutes+" "+ampm;
+        return hours + ":" + minutes + " " + ampm;
     }
 
     //Dialog implementation
@@ -460,23 +460,23 @@ public class GlobalUtils {
                     String productivity_txt = "";
                     String hours_txt = "";
                     String minutes_txt = "00";
-                    if(!productivity.getText().toString().isEmpty()){
+                    if (!productivity.getText().toString().isEmpty()) {
                         productivity_txt = productivity.getText().toString().trim();
-                    }else{
+                    } else {
                         //show error
-                        showInfoDialog(context, "Error", "Please type your productivit for today.", "OK",null);
+                        showInfoDialog(context, "Error", "Please type your productivit for today.", "OK", null);
                         return;
                     }
-                    if(!hours.getText().toString().isEmpty()){
+                    if (!hours.getText().toString().isEmpty()) {
                         hours_txt = hours.getText().toString().trim();
-                    }else{
-                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK",null);
+                    } else {
+                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK", null);
                         return;
                     }
-                    if(!minutes.getText().toString().isEmpty()){
+                    if (!minutes.getText().toString().isEmpty()) {
                         minutes_txt = minutes.getText().toString().trim();
                     }
-                    dialogCallback.onAction1(productivity_txt,hours_txt,minutes_txt);
+                    dialogCallback.onAction1(productivity_txt, hours_txt, minutes_txt);
                 }
                 infoDialog.dismiss();
             }
@@ -529,16 +529,16 @@ public class GlobalUtils {
                     String hours_txt = "";
                     String minutes_txt = "00";
 
-                    if(!hours.getText().toString().isEmpty()){
+                    if (!hours.getText().toString().isEmpty()) {
                         hours_txt = hours.getText().toString().trim();
-                    }else{
-                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK",null);
+                    } else {
+                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK", null);
                         return;
                     }
-                    if(!minutes.getText().toString().isEmpty()){
+                    if (!minutes.getText().toString().isEmpty()) {
                         minutes_txt = minutes.getText().toString().trim();
                     }
-                    dialogCallback.onAction3(0,hours_txt,minutes_txt);
+                    dialogCallback.onAction3(0, hours_txt, minutes_txt);
                 }
                 infoDialog.dismiss();
             }
@@ -555,16 +555,16 @@ public class GlobalUtils {
                     String hours_txt = "";
                     String minutes_txt = "00";
 
-                    if(!hours.getText().toString().isEmpty()){
+                    if (!hours.getText().toString().isEmpty()) {
                         hours_txt = hours.getText().toString().trim();
-                    }else{
-                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK",null);
+                    } else {
+                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK", null);
                         return;
                     }
-                    if(!minutes.getText().toString().isEmpty()){
+                    if (!minutes.getText().toString().isEmpty()) {
                         minutes_txt = minutes.getText().toString().trim();
                     }
-                    dialogCallback.onAction3(1,hours_txt,minutes_txt);
+                    dialogCallback.onAction3(1, hours_txt, minutes_txt);
                 }
                 infoDialog.dismiss();
             }
@@ -664,8 +664,6 @@ public class GlobalUtils {
         });
 
 
-
-
         btnCancel.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -681,7 +679,7 @@ public class GlobalUtils {
         infoDialog.show();
     }
 
-    public static void showDialogSearch(final Context context,final ArrayList<String> datelist,final SeachDialogCallback dialogCallback) {
+    public static void showDialogSearch(final Context context, final ArrayList<String> datelist, final SeachDialogCallback dialogCallback) {
         final SCCustomDialog infoDialog = new SCCustomDialog(context, R.style.CustomDialogTheme);
         LayoutInflater inflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.dialog_search_date, null);
@@ -696,9 +694,8 @@ public class GlobalUtils {
         Button btnAll = (Button) infoDialog.findViewById(R.id.dialog_btn_all);
 
 
-
         final AutoCompleteTextView date = (AutoCompleteTextView) infoDialog.findViewById(R.id.et_minute);
-        String [] dates = datelist.toArray(new String[datelist.size()]);
+        String[] dates = datelist.toArray(new String[datelist.size()]);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, dates);
 
@@ -715,10 +712,10 @@ public class GlobalUtils {
                 String search_txt = "";
 
                 if (dialogCallback != null) {
-                    if(!date.getText().toString().isEmpty()){
+                    if (!date.getText().toString().isEmpty()) {
                         search_txt = date.getText().toString().trim();
-                    }else{
-                        showInfoDialog(context, "Error", "Please type your date first", "OK",null);
+                    } else {
+                        showInfoDialog(context, "Error", "Please type your date first", "OK", null);
                         return;
                     }
                     dialogCallback.onAction1(search_txt);
@@ -752,14 +749,12 @@ public class GlobalUtils {
         });
 
 
-
         infoDialog.show();
     }
 
 
-
-    public static Time get_time(String time){
-       Time t = new Time();
+    public static Time get_time(String time) {
+        Time t = new Time();
         String[] separated = time.split(":");
         String hours = separated[0]; // this will contain "hour"
         String[] splitStr = separated[1].trim().split("\\s+");
@@ -777,44 +772,44 @@ public class GlobalUtils {
     public static String get_target_clockout(Time intime, String add_minutes) {
         String clockput = "";
         int minutes = Integer.parseInt(add_minutes);
-        int hours = minutes/60;
-        int minute = minutes%60;
-        String ampm ="";
+        int hours = minutes / 60;
+        int minute = minutes % 60;
+        String ampm = "";
         int updated_hour = 0;
         int updated_minute = 0;
 
-        if(intime.getAm_pm().equals("AM")){
-             updated_hour = intime.getHours()+hours;
-             updated_minute = intime.getMinutes()+minute;
+        if (intime.getAm_pm().equals("AM")) {
+            updated_hour = intime.getHours() + hours;
+            updated_minute = intime.getMinutes() + minute;
             if (updated_minute >= 60) {
-                updated_hour += updated_minute/60;
-                updated_minute = updated_minute%60;
+                updated_hour += updated_minute / 60;
+                updated_minute = updated_minute % 60;
             }
 
 
-            if(updated_hour >= 12){
-                if(updated_hour >12)
-                        updated_hour -= 12;
+            if (updated_hour >= 12) {
+                if (updated_hour > 12)
+                    updated_hour -= 12;
                 ampm = "PM";
-            }else{
+            } else {
                 ampm = "AM";
             }
 
-        }else {
-             updated_hour = intime.getHours()+hours;
-             updated_minute = intime.getMinutes()+minute;
+        } else {
+            updated_hour = intime.getHours() + hours;
+            updated_minute = intime.getMinutes() + minute;
 
             if (updated_minute >= 60) {
-                updated_hour += updated_minute/60;
-                updated_minute = updated_minute%60;
+                updated_hour += updated_minute / 60;
+                updated_minute = updated_minute % 60;
             }
 
 
-            if(updated_hour >=12){
-                if(updated_hour > 12)
+            if (updated_hour >= 12) {
+                if (updated_hour > 12)
                     updated_hour -= 12;
                 ampm = "AM";
-            }else{
+            } else {
                 ampm = "PM";
             }
         }
@@ -832,38 +827,130 @@ public class GlobalUtils {
     public static Time get_actual_working_hours(Time intime, Time outtime) {
 
         Time t = new Time();
-        if(intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")){
-            int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours()+"",outtime.getMinutes()+"")) - Integer.parseInt(convertTimeInMinutes(intime.getHours()+"",intime.getMinutes()+"")));
-            t.setHours(total_minute/60);
-            t.setMinutes(total_minute%60);
+        if (intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")) {
+            int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+            t.setHours(total_minute / 60);
+            t.setMinutes(total_minute % 60);
 
-        }else{
-            int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours()+"",outtime.getMinutes()+"")) - Integer.parseInt(convertTimeInMinutes(intime.getHours()+"",intime.getMinutes()+"")));
-            total_minute += 720;
-            t.setHours(total_minute/60);
-            t.setMinutes(total_minute%60);
+        } else {
+            if ((intime.getHours() == 12 && outtime.getHours() != 12) || (intime.getHours() != 12 && outtime.getHours() == 12)) {
+                int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+                t.setHours(total_minute / 60);
+                t.setMinutes(total_minute % 60);
+            } else {
+                int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+                total_minute += 720;
+                t.setHours(total_minute / 60);
+                t.setMinutes(total_minute % 60);
+            }
         }
 
-        return  t;
+        return t;
 
     }
 
     public static Time get_break(Time intime, Time outtime) {
 
         Time t = new Time();
-        if(intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")){
-            int total_minute = (Integer.parseInt(convertTimeInMinutes(intime.getHours()+"",intime.getMinutes()+"")) - Integer.parseInt(convertTimeInMinutes(outtime.getHours()+"",outtime.getMinutes()+"")));
-            t.setHours(total_minute/60);
-            t.setMinutes(total_minute%60);
+        if (intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")) {
+            int total_minute = (Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")));
+            t.setHours(total_minute / 60);
+            t.setMinutes(total_minute % 60);
 
-        }else{
-            int total_minute = (Integer.parseInt(convertTimeInMinutes(intime.getHours()+"",intime.getMinutes()+"")) - Integer.parseInt(convertTimeInMinutes(outtime.getHours()+"",outtime.getMinutes()+"")));
-            total_minute += 720;
-            t.setHours(total_minute/60);
-            t.setMinutes(total_minute%60);
+        } else {
+            if ((intime.getHours() == 12 && outtime.getHours() != 12) || (intime.getHours() != 12 && outtime.getHours() == 12)) {
+                int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+                t.setHours(total_minute / 60);
+                t.setMinutes(total_minute % 60);
+            } else {
+                int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+                total_minute += 720;
+                t.setHours(total_minute / 60);
+                t.setMinutes(total_minute % 60);
+            }
         }
 
-        return  t;
+        return t;
 
+    }
+
+
+    public static Time get_worked_in_that_session(Time intime, Time outtime) {
+
+        Time t = new Time();
+        if (intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")) {
+            int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+            t.setHours(total_minute / 60);
+            t.setMinutes(total_minute % 60);
+
+        } else {
+            if ((intime.getHours() == 12 && outtime.getHours() != 12) || (intime.getHours() != 12 && outtime.getHours() == 12)) {
+                int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+                t.setHours(total_minute / 60);
+                t.setMinutes(total_minute % 60);
+            } else {
+                int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+                total_minute += 720;
+                t.setHours(total_minute / 60);
+                t.setMinutes(total_minute % 60);
+            }
+        }
+
+        return t;
+
+    }
+
+
+    public static String convert_time_in_hhmm_format(String hour, String minute) {
+        return hour
+                + "h"
+                + ":"
+                + minute
+                + "m";
+    }
+
+    public static boolean check_conflict(Time check_time, Time from_time) {
+        boolean result = false;
+        //calculation
+        if (from_time.getAm_pm().equals("AM") && check_time.getAm_pm().equals("AM") || from_time.getAm_pm().equals("PM") && check_time.getAm_pm().equals("PM")) {
+            //if same am/pm
+            if (from_time.getHours() != 12 && check_time.getHours() == 12) {
+                if((from_time.getHours()+12) < check_time.getHours())
+                    return true;
+
+            } else if (from_time.getHours() == 12 && check_time.getHours() != 12) {
+                if(from_time.getHours() < (check_time.getHours()+12))
+                    return true;
+            } else {
+                 if (from_time.getHours() == check_time.getHours()) {
+                    if (from_time.getMinutes() < check_time.getMinutes()) {
+                        return true;
+                    }
+                } else {
+                    if (from_time.getHours() < check_time.getHours()) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            if(!(from_time.getAm_pm().equals("PM") && check_time.getAm_pm().equals("AM"))){
+
+                if (check_time.getHours() != 12 && from_time.getHours() != 12) {
+                    if ((check_time.getHours() + 12) > from_time.getHours()) {
+                        return true;
+                    }
+
+                } else if (check_time.getHours() == 12 && from_time.getHours() == 12) {
+                    return true;
+                } else {
+                    if (check_time.getHours() > from_time.getHours()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+
+        return result;
     }
 }
