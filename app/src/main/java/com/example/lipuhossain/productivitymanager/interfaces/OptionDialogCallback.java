@@ -10,5 +10,5 @@ public interface OptionDialogCallback {
     public void onActionClear();
     public void onActionSave();
     public void onActionCancel();
-
+    public void onActionHelp();
 }

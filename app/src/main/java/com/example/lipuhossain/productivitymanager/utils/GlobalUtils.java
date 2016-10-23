@@ -246,12 +246,12 @@ public class GlobalUtils {
         final Thread t = new Thread() {
             @Override
             public void run() {
-                if (value <= 100) {
+                if (value <= 400) {
                     int jumpTime = progress.getProgress();
 
                     while (jumpTime < value) {
                         try {
-                            sleep(35);
+                            sleep(10);
                             jumpTime += 1;
                             progress.setProgress(jumpTime);
                         } catch (InterruptedException e) {
@@ -320,7 +320,7 @@ public class GlobalUtils {
 
                 while (jumpTime != 0) {
                     try {
-                        sleep(35);
+                        sleep(10);
                         jumpTime -= 1;
                         progress.setProgress(jumpTime);
                     } catch (InterruptedException e) {
@@ -600,6 +600,7 @@ public class GlobalUtils {
         LinearLayout btnChangeTime = (LinearLayout) infoDialog.findViewById(R.id.btnChangeTime);
         LinearLayout btnClear = (LinearLayout) infoDialog.findViewById(R.id.btnClear);
         LinearLayout btnSave = (LinearLayout) infoDialog.findViewById(R.id.btnSave);
+        LinearLayout btnHelp = (LinearLayout) infoDialog.findViewById(R.id.btnHelp);
         LinearLayout btnCancel = (LinearLayout) infoDialog.findViewById(R.id.btnCancel);
 
 
@@ -651,13 +652,13 @@ public class GlobalUtils {
             }
         });
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        btnHelp.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 //your business logic
                 if (dialogCallback != null) {
-                    dialogCallback.onActionCancel();
+                    dialogCallback.onActionHelp();
                 }
                 infoDialog.dismiss();
             }
@@ -828,7 +829,17 @@ public class GlobalUtils {
 
         Time t = new Time();
         if (intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")) {
-            int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+            int total_minute = 0;
+            if(intime.getHours() == outtime.getHours()){
+                total_minute = (Integer.parseInt(outtime.getMinutes()+"") - Integer.parseInt(intime.getMinutes()+""));
+
+            }else{
+                total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+
+                if(intime.getHours() == 12 && outtime.getHours() != 12){
+                    total_minute += 720;
+                }
+            }
             t.setHours(total_minute / 60);
             t.setMinutes(total_minute % 60);
 
@@ -853,7 +864,17 @@ public class GlobalUtils {
 
         Time t = new Time();
         if (intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")) {
-            int total_minute = (Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")));
+            int total_minute = 0;
+            if(intime.getHours() == outtime.getHours()){
+                total_minute = (Integer.parseInt(intime.getMinutes()+"") - Integer.parseInt(outtime.getMinutes()+""));
+
+            }else{
+                total_minute = (Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")));
+
+                if(outtime.getHours() == 12 && intime.getHours() != 12){
+                    total_minute += 720;
+                }
+            }
             t.setHours(total_minute / 60);
             t.setMinutes(total_minute % 60);
 
@@ -879,7 +900,17 @@ public class GlobalUtils {
 
         Time t = new Time();
         if (intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")) {
-            int total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+            int total_minute = 0;
+            if(intime.getHours() == outtime.getHours()){
+                 total_minute = (Integer.parseInt(outtime.getMinutes()+"") - Integer.parseInt(intime.getMinutes()+""));
+
+            }else{
+                total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
+
+                if(intime.getHours() == 12 && outtime.getHours() != 12){
+                    total_minute += 720;
+                }
+            }
             t.setHours(total_minute / 60);
             t.setMinutes(total_minute % 60);
 

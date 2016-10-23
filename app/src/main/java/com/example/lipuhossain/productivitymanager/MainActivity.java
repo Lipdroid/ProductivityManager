@@ -427,18 +427,18 @@ public class MainActivity extends AppCompatActivity {
         tv_total_treatment.setText(schedule.getTotal_treatment_time());
 
         if (schedule.getTarget_productivity() != null && !schedule.getTarget_productivity().equals("0")) {
-            tv_target_productivity.setText("(" + schedule.getTarget_productivity() + "%)");
+            tv_target_productivity.setText("" + schedule.getTarget_productivity() + "%");
             GlobalUtils.showProgress(progress_target_productivity, Integer.parseInt(schedule.getTarget_productivity()));
         } else {
-            tv_target_productivity.setText("(" + 0 + "%)");
+            tv_target_productivity.setText("" + 0 + "%");
             GlobalUtils.showProgress(progress_target_productivity, 0);
         }
 
         if (schedule.getActual_productivity() != null && !schedule.getActual_productivity().equals("0")) {
-            tv_actual_productivity.setText("(" + schedule.getActual_productivity() + "%)");
+            tv_actual_productivity.setText("" + schedule.getActual_productivity() + "%");
             GlobalUtils.showProgress(progress_actual_productivity, Integer.parseInt(schedule.getActual_productivity()));
         } else {
-            tv_actual_productivity.setText("(" + 0 + "%)");
+            tv_actual_productivity.setText("" + 0 + "%");
             GlobalUtils.showProgress(progress_actual_productivity, 0);
         }
 
@@ -457,8 +457,8 @@ public class MainActivity extends AppCompatActivity {
 
         GlobalUtils.resetProgress(progress_target_productivity);
         GlobalUtils.resetProgress(progress_actual_productivity);
-        tv_target_productivity.setText("(" + 0 + "%)");
-        tv_actual_productivity.setText("(" + 0 + "%)");
+        tv_target_productivity.setText("" + 0 + "%");
+        tv_actual_productivity.setText("" + 0 + "%");
 
 
     }
@@ -483,7 +483,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onActionChangeTime() {
                 if (GlobalUtils.TARGET_TREATMENT_TIME.equals("0")) {
-                    GlobalUtils.showInfoDialog(mContext, "Error", "You have not entered your total treatment time yet", "OK", new SCDialogCallback() {
+                    GlobalUtils.showInfoDialog(MainActivity.this, "Error", "You have not entered your total treatment time yet", "OK", new SCDialogCallback() {
                         @Override
                         public void onAction1() {
 
@@ -511,7 +511,34 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onActionClear() {
+                //show confirmation dialog
+                GlobalUtils.showConfirmDialog(MainActivity.this, "Confirmation", "Are you sure want to clear data?", "Yes", "No", new SCDialogCallback() {
+                    @Override
+                    public void onAction1() {
+                        db.deleteSchedule(GlobalUtils.getCurrentDate().getFormattedDate());
+                        mListScheduleData.clear();
+                        GlobalUtils.calculated_schedule = new Schedule();
+                        initScheduleList();
+                        reset_Views();
+                        GlobalUtils.no_counting = true;
+                        GlobalUtils.TARGET_TREATMENT_TIME = "0";
+                    }
 
+                    @Override
+                    public void onAction2() {
+
+                    }
+
+                    @Override
+                    public void onAction3() {
+
+                    }
+
+                    @Override
+                    public void onAction4() {
+
+                    }
+                });
             }
 
             @Override
@@ -521,6 +548,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onActionCancel() {
+
+            }
+
+            @Override
+            public void onActionHelp() {
 
             }
         });

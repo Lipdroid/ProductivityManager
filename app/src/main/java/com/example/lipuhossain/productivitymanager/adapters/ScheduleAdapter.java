@@ -2,6 +2,7 @@ package com.example.lipuhossain.productivitymanager.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -79,7 +80,10 @@ public class ScheduleAdapter extends BaseAdapter {
             mHolder.tvBreaktime = (TextView) convertView.findViewById(R.id.breaktime);
             mHolder.header = (TextView) convertView.findViewById(R.id.header_text);
             mHolder.break_layout = (RelativeLayout) convertView.findViewById(R.id.rl_break);
+
             mHolder.tv_label_patient_time = (TextView) convertView.findViewById(R.id.tv_label_patient_time);
+            mHolder.tv_label_clock_in = (TextView) convertView.findViewById(R.id.tv_label_clock_in);
+            mHolder.tv_label_clock_out = (TextView) convertView.findViewById(R.id.tv_label_clock_out);
 
 
             mHolder.divider_one = (View) convertView.findViewById(R.id.divider_one);
@@ -125,6 +129,9 @@ public class ScheduleAdapter extends BaseAdapter {
         mHolder.header.setText(data.getSchedule_no());
         mHolder.tvIntime.setText(data.getIn_time());
         mHolder.tvOuttime.setText(data.getOut_time());
+        mHolder.tv_label_clock_in.setText(convert_position_to_places(position + 1) + " Clock In");
+        mHolder.tv_label_clock_out.setText(convert_position_to_places(position + 1) + " Clock Out");
+
         if (data.getSchedule_no().equals(GlobalUtils.SESSION_ENDED)) {
             mHolder.main_btn.setVisibility(View.GONE);
 
@@ -168,6 +175,7 @@ public class ScheduleAdapter extends BaseAdapter {
                             TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                                 @Override
                                 public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+                                    GlobalUtils.no_counting = false;
                                     schedule = mListData.get(position);
                                     schedule.setDate(GlobalUtils.getCurrentDate().getFormattedDate());
                                     String ampm = "";
@@ -204,8 +212,15 @@ public class ScheduleAdapter extends BaseAdapter {
                                     ((MainActivity) mContext).addItemToMainScheduleList(schedule);
 
                                 }
-                            }, now.get(Calendar.HOUR), now.get(Calendar.MINUTE), false);
+                            }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), false);
 
+                            tpd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    GlobalUtils.no_counting = true;
+                                }
+                            });
+                            tpd.setTitle("Clock In Time");
                             tpd.show(((Activity) mContext).getFragmentManager(), "Timepickerdialog");
 
                         }
@@ -254,7 +269,7 @@ public class ScheduleAdapter extends BaseAdapter {
                                 GlobalUtils.showInfoDialog(mContext, "Error", "Your entered time conflicted other times" +
                                         ",Please enter a non conflicted value", "OK", null);
                                 GlobalUtils.no_counting = true;
-                            }else {
+                            } else {
                                 GlobalUtils.no_counting = false;
 
                                 schedule.setIn_time(intime);
@@ -280,8 +295,8 @@ public class ScheduleAdapter extends BaseAdapter {
                             }
 
                         }
-                    }, now.get(Calendar.HOUR), now.get(Calendar.MINUTE), false);
-
+                    }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), false);
+                    tpd.setTitle("Clock In Time");
                     tpd.show(((Activity) mContext).getFragmentManager(), "Timepickerdialog");
 
                 }
@@ -341,7 +356,7 @@ public class ScheduleAdapter extends BaseAdapter {
                         Log.e("Conflicted", "Conflicted");
                         GlobalUtils.showInfoDialog(mContext, "Error", "Your entered time conflicted other times" +
                                 ",Please enter a non conflicted value", "OK", null);
-                    }else {
+                    } else {
 
                         schedule.setOut_time(outtime);
 
@@ -367,8 +382,8 @@ public class ScheduleAdapter extends BaseAdapter {
 
 
                 }
-            }, now.get(Calendar.HOUR), now.get(Calendar.MINUTE), false);
-
+            }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), false);
+            tpd.setTitle("Clock Out Time");
             tpd.show(((Activity) mContext).getFragmentManager(), "Timepickerdialog");
 
         }
@@ -398,5 +413,25 @@ public class ScheduleAdapter extends BaseAdapter {
 
     private void setListenerForView() {
         mHolder.main_btn.setOnClickListener(mOnClickListener);
+    }
+
+    private String convert_position_to_places(int position) {
+        String result = "";
+        switch (position) {
+            case 1:
+                result = position + "st";
+                break;
+            case 2:
+                result = position + "nd";
+                break;
+            case 3:
+                result = position + "rd";
+                break;
+            default:
+                result = position + "th";
+                break;
+
+        }
+        return result;
     }
 }

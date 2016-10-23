@@ -43,7 +43,8 @@ public class HistoryActivity extends AppCompatActivity {
     private void initHistoryList() {
         mListData = db.getAllSchedules();
         mListHistoryData.clear();
-        getHistoryData(mListData);
+        if(!(mListData.size() == 0))
+            getHistoryData(mListData);
         mListAdapter = new HistoryAdapter(mListHistoryData,this);
         history_list.setAdapter(mListAdapter);
         //add all history dates

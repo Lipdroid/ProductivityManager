@@ -91,7 +91,7 @@
                             android:layout_marginRight="84px"
                             android:layout_marginTop="40px"
                             android:tag="51"
-                            android:text="Add/Minus TIme"
+                            android:text="Add/Minus Treatment Time"
                             android:textColor="@color/main_dark"
                             android:textSize="51px"
                             android:visibility="visible" />
@@ -116,18 +116,20 @@
                             android:layout_marginRight="84px"
                             android:layout_marginTop="40px"
                             android:tag="51"
-                            android:text="Clear"
+                            android:text="Clear Data"
                             android:textColor="@color/main_dark"
                             android:textSize="51px"
                             android:visibility="visible" />
                     </LinearLayout>
 
                     <View
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:background="@color/common_gray" />
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:id="@+id/btnSave"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -142,6 +144,33 @@
                             android:layout_marginTop="40px"
                             android:tag="51"
                             android:text="Save"
+                            android:textColor="@color/main_dark"
+                            android:textSize="51px"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
+                    <View
+                        android:visibility="visible"
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/common_gray" />
+
+                    <LinearLayout
+                        android:visibility="visible"
+                        android:id="@+id/btnHelp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/dialog_item_pressed">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="40px"
+                            android:layout_marginLeft="84px"
+                            android:layout_marginRight="84px"
+                            android:layout_marginTop="40px"
+                            android:tag="51"
+                            android:text="Help"
                             android:textColor="@color/main_dark"
                             android:textSize="51px"
                             android:visibility="visible" />

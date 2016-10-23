@@ -20,8 +20,8 @@
             android:layout_alignParentLeft="true"
             android:layout_margin="11dp"
             android:onClick="afterClickHistory"
-            android:visibility="gone"
-            android:src="@drawable/history" />
+            android:src="@drawable/history"
+            android:visibility="gone" />
 
 
         <TextView
@@ -50,7 +50,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="245dp"
             android:background="@color/colorPrimary"
             android:orientation="vertical">
 
@@ -85,7 +85,7 @@
                             android:textColor="@color/common_white_1"
                             android:textSize="20dp" />
 
-                        <TextView
+                       <!-- <TextView
                             android:id="@+id/target_product"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -94,23 +94,40 @@
                             android:text="(100%)"
                             android:textColor="@color/common_yellow"
                             android:textSize="10dp"
-                            android:visibility="gone" />
+                            android:visibility="gone" />-->
 
                     </LinearLayout>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
                     <io.netopen.hotbitmapgg.library.view.RingProgressBar
                         android:id="@+id/estimated_progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
-                        app:max="100"
+                        app:max="400"
                         app:ringColor="@android:color/darker_gray"
                         app:ringProgressColor="@color/common_yellow"
                         app:ringWidth="7dp"
                         app:style="STROKE"
-                        app:textColor="@color/common_white_1"
+                        app:textColor="@color/colorPrimary"
                         app:textIsShow="true"
                         app:textSize="30dp" />
+
+                        <TextView
+                            android:id="@+id/target_product"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginLeft="15dp"
+                            android:text="(100%)"
+                            android:textStyle="bold"
+                            android:textColor="@color/common_white_1"
+                            android:textSize="20dp"
+                            />
+                    </FrameLayout>
 
 
                     <LinearLayout
@@ -123,7 +140,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Treatment Patient Time:"
+                            android:text="Target Patient Time:"
                             android:textColor="@color/common_white_1"
                             android:textSize="12dp" />
 
@@ -188,7 +205,7 @@
                             android:textColor="@color/common_white_1"
                             android:textSize="20dp" />
 
-                        <TextView
+                        <!--<TextView
                             android:id="@+id/actual_product"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -197,24 +214,41 @@
                             android:text="(100%)"
                             android:textColor="@color/common_yellow"
                             android:textSize="10dp"
-                            android:visibility="gone" />
+                            android:visibility="gone" />-->
 
                     </LinearLayout>
 
-
-                    <io.netopen.hotbitmapgg.library.view.RingProgressBar
-                        android:id="@+id/actual_progress"
+                    <FrameLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        app:max="100"
-                        app:ringColor="@android:color/darker_gray"
-                        app:ringProgressColor="@color/common_yellow"
-                        app:ringWidth="7dp"
-                        app:style="STROKE"
-                        app:textColor="@color/common_white_1"
-                        app:textIsShow="true"
-                        app:textSize="30dp" />
+                        android:layout_height="wrap_content">
+
+                        <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                            android:id="@+id/actual_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            app:max="400"
+                            app:ringColor="@android:color/darker_gray"
+                            app:ringProgressColor="@color/common_yellow"
+                            app:ringWidth="7dp"
+                            app:style="STROKE"
+                            app:textColor="@color/colorPrimary"
+                            app:textIsShow="true"
+                            app:textSize="30dp" />
+                        <TextView
+                            android:id="@+id/actual_product"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginLeft="10dp"
+                            android:text="(100%)"
+                            android:textStyle="bold"
+                            android:textColor="@color/common_white_1"
+                            android:textSize="20dp"
+                             />
+
+                    </FrameLayout>
 
 
                     <LinearLayout
@@ -278,12 +312,14 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="15dp"
+                android:background="@drawable/red_border"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Treatment Patient Time:"
+                    android:layout_margin="5dp"
+                    android:text="Total Patient Treatment Time:"
                     android:textColor="@color/common_white_1"
                     android:textSize="16dp" />
 
@@ -291,6 +327,7 @@
                     android:id="@+id/tv_total_treatment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:text="7:52"
                     android:textColor="@color/common_white_1"
                     android:textSize="16dp" />

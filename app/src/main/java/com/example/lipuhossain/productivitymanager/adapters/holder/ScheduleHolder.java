@@ -26,4 +26,6 @@ public class ScheduleHolder {
     public View divider_one = null;
     public View divider_two = null;
     public TextView tv_label_patient_time = null;
+    public TextView tv_label_clock_in = null;
+    public TextView tv_label_clock_out = null;
 }
