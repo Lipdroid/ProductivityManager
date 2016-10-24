@@ -220,7 +220,8 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(Constants.TOTAL_TREATMENT_TIME, totalTreatmentTime);
         editor.commit();
         //calculate again
-        for (Schedule schedule : mListScheduleData) {
+        for (int i = 0;i< mListScheduleData.size();i++) {
+            Schedule schedule = mListScheduleData.get(i);
             if (schedule.getId() != null) {
                 updated = true;
                 GlobalUtils.TARGET_PRODUCTIVITY = GlobalUtils.preferences(this).getString(Constants.TARGET_PRODUCTIVITY, "0");
@@ -231,16 +232,27 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString(Constants.TARGET_TREATMENT_TIME, schedule.getTarget_treatment_time());
                 editor.commit();
 
-                //here is the problem
-                if (schedule.getBreak_time() != null && !schedule.getBreak_time().equals("00:00")) {
-                    Time break_time = GlobalUtils.get_time(schedule.getBreak_time() + " N/A");
-                    Time t = GlobalUtils.get_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
-                    String get_clock_out = GlobalUtils.get_target_clockout(t, GlobalUtils.convertTimeInMinutes(break_time.getHours() + "", break_time.getMinutes() + ""));
-                    schedule.setTarget_clockout_time(get_clock_out);
-                } else {
-                    //calculate target clockout time depending on the target treatment time(intime + target treatment time)
+                if( i==0 &&schedule.getId().equals(mListScheduleData.get(0).getId())){
                     schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
+
+                }else{
+                    Schedule pre_sch = mListScheduleData.get(i - 1);
+                    schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(pre_sch.getTarget_clockout_time()), GlobalUtils.convertTimeInMinutes(GlobalUtils.get_time(pre_sch.getBreak_time() + " N/A").getHours() + "", GlobalUtils.get_time(pre_sch.getBreak_time() + " N/A").getMinutes() + "")));
+
                 }
+
+                //here is the problem
+//                if (schedule.getBreak_time() != null && !schedule.getBreak_time().equals("00:00")) {
+//                    Time break_time = GlobalUtils.get_time(schedule.getBreak_time() + " N/A");
+//                    Time t = GlobalUtils.get_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
+//                    String get_clock_out = GlobalUtils.get_target_clockout(t, GlobalUtils.convertTimeInMinutes(break_time.getHours() + "", break_time.getMinutes() + ""));
+//                    schedule.setTarget_clockout_time(get_clock_out);
+//                } else {
+//                    //calculate target clockout time depending on the target treatment time(intime + target treatment time)
+//                    schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
+//                }
+
+
                 schedule.setActual_productivity(GlobalUtils.get_productivity(schedule.getTotal_treatment_time(), schedule.getActual_treatment_time()));
                 update_a_schedule(schedule);
 
