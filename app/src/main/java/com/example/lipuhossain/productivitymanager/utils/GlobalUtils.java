@@ -248,7 +248,7 @@ public class GlobalUtils {
         final Thread t = new Thread() {
             @Override
             public void run() {
-                if (value <= 400) {
+                //if (value <= 400) {
                     int jumpTime = 0;
                     if(progress.getProgress() < value){
                          jumpTime = progress.getProgress();
@@ -264,7 +264,7 @@ public class GlobalUtils {
                             e.printStackTrace();
                         }
                     }
-                }
+              //  }
             }
         };
         t.start();
