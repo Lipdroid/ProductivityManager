@@ -266,8 +266,8 @@ public class ScheduleAdapter extends BaseAdapter {
 
                             if (!GlobalUtils.check_conflict(GlobalUtils.get_time(intime), GlobalUtils.get_time(pre_sch.getOut_time()))) {
                                 Log.e("Conflicted", "Conflicted");
-                                GlobalUtils.showInfoDialog(mContext, "Error", "Your entered time conflicted other times" +
-                                        ",Please enter a non conflicted value", "OK", null);
+                                GlobalUtils.showInfoDialog(mContext, "Error", "Time entered conflicts with earlier time" +
+                                        ", please resolve", "OK", null);
                                 GlobalUtils.no_counting = true;
                             } else {
                                 GlobalUtils.no_counting = false;
@@ -287,9 +287,9 @@ public class ScheduleAdapter extends BaseAdapter {
                                 Time break_time = GlobalUtils.get_break(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(out));
                                 pre_sch.setBreak_time(String.format("%02d", break_time.getHours()) + ":" + String.format("%02d", break_time.getMinutes()));
 
-                                schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(pre_sch.getTarget_clockout_time()), GlobalUtils.convertTimeInMinutes(GlobalUtils.get_time(pre_sch.getBreak_time() + " NO").getHours() + "", GlobalUtils.get_time(pre_sch.getBreak_time() + " NO").getMinutes() + "")));
+                                schedule.setTarget_clockout_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(pre_sch.getTarget_clockout_time()), GlobalUtils.convertTimeInMinutes(GlobalUtils.get_time(pre_sch.getBreak_time() + " N/A").getHours() + "", GlobalUtils.get_time(pre_sch.getBreak_time() + " N/A").getMinutes() + "")));
 
-
+                                ((MainActivity) mContext).clock_in_so_invisible_the_item();
                                 ((MainActivity) mContext).update_db(pre_sch);
                                 ((MainActivity) mContext).addItemToMainScheduleList(schedule);
                             }
@@ -302,8 +302,8 @@ public class ScheduleAdapter extends BaseAdapter {
                 }
             } else {
                 //currently running an session
-                GlobalUtils.showInfoDialog(mContext, "Error", "A session is ongoing currently,please clock out the on going" +
-                        "ongoing session", "OK", new SCDialogCallback() {
+                GlobalUtils.showInfoDialog(mContext, "Error", "Please clock out of previous sessions" +
+                        "before you clock in again", "OK", new SCDialogCallback() {
                     @Override
                     public void onAction1() {
 
@@ -354,10 +354,11 @@ public class ScheduleAdapter extends BaseAdapter {
 
                     if (!GlobalUtils.check_conflict(GlobalUtils.get_time(outtime), GlobalUtils.get_time(schedule.getIn_time()))) {
                         Log.e("Conflicted", "Conflicted");
-                        GlobalUtils.showInfoDialog(mContext, "Error", "Your entered time conflicted other times" +
-                                ",Please enter a non conflicted value", "OK", null);
+                        GlobalUtils.showInfoDialog(mContext, "Error", "Time entered conflicts with earlier time" +
+                                ", please resolve", "OK", null);
                     } else {
 
+                        ((MainActivity) mContext).clock_out_so_visible_the_item();
                         schedule.setOut_time(outtime);
 
                         Time working_hours = GlobalUtils.get_worked_in_that_session(GlobalUtils.get_time(schedule.getIn_time()), GlobalUtils.get_time(schedule.getOut_time()));
@@ -375,7 +376,6 @@ public class ScheduleAdapter extends BaseAdapter {
                         schedule.setSchedule_no(GlobalUtils.SESSION_ENDED);
                         schedule.setActual_productivity(GlobalUtils.get_productivity(GlobalUtils.TOTAL_TREATMENT_TIME, GlobalUtils.convertTimeInMinutes(actual_treatment_time.getHours() + "", actual_treatment_time.getMinutes() + "")));
                         schedule.setActual_clockout_time(schedule.getOut_time());
-
                         ((MainActivity) mContext).updateItemToMainScheduleList(schedule);
                         GlobalUtils.no_counting = true;
                     }

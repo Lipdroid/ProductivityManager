@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -198,12 +199,16 @@ public class MainActivity extends AppCompatActivity {
                     update_all_the_data_according_to_new_total_treatment_time(GlobalUtils.TOTAL_TREATMENT_TIME);
                     //update the listview from the new data from database
 
+
                 }
 
             }
 
             @Override
             public void onAction2() {
+                //solving keyboard issue
+                InputMethodManager inputManager = (InputMethodManager) MainActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
             }
         });
@@ -225,6 +230,8 @@ public class MainActivity extends AppCompatActivity {
                 //save the target treatment_time which is fixed
                 editor.putString(Constants.TARGET_TREATMENT_TIME, schedule.getTarget_treatment_time());
                 editor.commit();
+
+                //here is the problem
                 if (schedule.getBreak_time() != null && !schedule.getBreak_time().equals("00:00")) {
                     Time break_time = GlobalUtils.get_time(schedule.getBreak_time() + " N/A");
                     Time t = GlobalUtils.get_time(GlobalUtils.get_target_clockout(GlobalUtils.get_time(schedule.getIn_time()), schedule.getTarget_treatment_time()));
@@ -436,7 +443,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (schedule.getActual_productivity() != null && !schedule.getActual_productivity().equals("0")) {
             tv_actual_productivity.setText("" + schedule.getActual_productivity() + "%");
-            GlobalUtils.showProgress(progress_actual_productivity, Integer.parseInt(schedule.getActual_productivity()));
+
+            Double value = Double.parseDouble(schedule.getActual_productivity());
+            GlobalUtils.showProgress(progress_actual_productivity,value.intValue() );
         } else {
             tv_actual_productivity.setText("" + 0 + "%");
             GlobalUtils.showProgress(progress_actual_productivity, 0);
@@ -512,7 +521,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onActionClear() {
                 //show confirmation dialog
-                GlobalUtils.showConfirmDialog(MainActivity.this, "Confirmation", "Are you sure want to clear data?", "Yes", "No", new SCDialogCallback() {
+                GlobalUtils.showConfirmDialog(MainActivity.this, "Confirmation", "Are you sure you want to clear all data?", "Yes", "No", new SCDialogCallback() {
                     @Override
                     public void onAction1() {
                         db.deleteSchedule(GlobalUtils.getCurrentDate().getFormattedDate());
@@ -563,5 +572,21 @@ public class MainActivity extends AppCompatActivity {
     public void afterClickHistory(View view) {
 //        Intent intent = new Intent(MainActivity.this,HistoryActivity.class);
 //        startActivity(intent);
+    }
+
+
+    public void clock_in_so_invisible_the_item(){
+        tv_actual_out_time.setVisibility(View.INVISIBLE);
+        tv_actual_treatment_time.setVisibility(View.INVISIBLE);
+        tv_actual_productivity.setVisibility(View.INVISIBLE);
+        GlobalUtils.resetProgress(progress_actual_productivity);
+    }
+
+
+    public void clock_out_so_visible_the_item(){
+        tv_actual_out_time.setVisibility(View.VISIBLE);
+        tv_actual_treatment_time.setVisibility(View.VISIBLE);
+        tv_actual_productivity.setVisibility(View.VISIBLE);
+
     }
 }

@@ -10,7 +10,7 @@
         android:id="@+id/rl_status"
         android:layout_below="@+id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
+        android:layout_height="200dp"
         android:background="@color/colorPrimary"
         >
         <LinearLayout
@@ -22,8 +22,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Treatment Time: "
-                android:textSize="20dp"
+                android:text="Total Patient Treatment Time: "
+                android:textSize="16dp"
                 android:textColor="@color/common_white_1"/>
 
             <TextView
@@ -37,15 +37,17 @@
 
 
         <LinearLayout
+            android:id="@+id/left"
             android:layout_below="@+id/head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="15dp"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -54,7 +56,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="1dp"
-                    android:text="Target"
+                    android:text="GOAL"
                     android:textColor="@color/common_white_1"
                     android:textSize="20dp" />
 
@@ -71,9 +73,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Treatment:"
+                    android:text="Target Patient Time:"
                     android:textColor="@color/common_white_1"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tv_target_treatment"
@@ -95,9 +97,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Clock out:"
+                    android:text="Target Clock Out:"
                     android:textColor="@color/common_white_1"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tv_target_clock_out"
@@ -110,11 +112,11 @@
 
             </LinearLayout>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/common_white_1"
                 android:text="Productivity"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_marginTop="5dp"
                 android:textSize="20dp"/>
 
@@ -125,22 +127,24 @@
                 android:layout_gravity="center"
                 android:text="40%"
                 android:textColor="@color/common_yellow"
-                android:textSize="50dp" />
+                android:textSize="35dp" />
 
         </LinearLayout>
 
 
         <LinearLayout
+android:layout_toRightOf="@+id/left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/head"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="15dp"
             android:orientation="vertical">
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -149,7 +153,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="1dp"
-                    android:text="Actual"
+                    android:text="YOU"
                     android:textColor="@color/common_white_1"
                     android:textSize="20dp" />
 
@@ -166,9 +170,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Treatment:"
+                    android:text="Your Patient Time:"
                     android:textColor="@color/common_white_1"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tv_actual_treatment_time"
@@ -190,9 +194,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Clock out:"
+                    android:text="Your Clock Out:"
                     android:textColor="@color/common_white_1"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tv_actual_out_time"
@@ -207,11 +211,11 @@
 
             <TextView
                 android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/common_white_1"
                 android:text="Productivity"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:textSize="20dp"/>
 
             <TextView
@@ -221,7 +225,7 @@
                 android:layout_gravity="center"
                 android:text="40%"
                 android:textColor="@color/common_yellow"
-                android:textSize="50dp" />
+                android:textSize="35dp" />
 
         </LinearLayout>
 

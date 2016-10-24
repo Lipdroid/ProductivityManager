@@ -103,9 +103,9 @@ public class DetailsActivity extends AppCompatActivity {
             int target_treatment_time = Integer.parseInt(calculated_schedule.getTarget_treatment_time());
             int updated_target_hour = target_treatment_time / 60;
             int updated_target_minute = target_treatment_time % 60;
-            calculated_schedule.setTarget_treatment_time(String.format("%02d", updated_target_hour)
+            calculated_schedule.setTarget_treatment_time(String.format("%02d%2$s", updated_target_hour,"h")
                     + ":"
-                    + String.format("%02d", updated_target_minute));
+                    + String.format("%02d%2$s", updated_target_minute,"m"));
         }
 
 
@@ -122,9 +122,9 @@ public class DetailsActivity extends AppCompatActivity {
         if (minute != 0) {
             int updated_hour = minute / 60;
             int updated_minute = minute % 60;
-            calculated_schedule.setActual_treatment_time(String.format("%02d", updated_hour)
+            calculated_schedule.setActual_treatment_time(String.format("%02d%2$s", updated_hour,"h")
                     + ":"
-                    + String.format("%02d", updated_minute));
+                    + String.format("%02d%2$s", updated_minute,"m"));
             calculated_schedule.setActual_productivity(GlobalUtils.get_productivity(calculated_schedule.getTotal_treatment_time(), minute + ""));
 
         }
@@ -133,9 +133,9 @@ public class DetailsActivity extends AppCompatActivity {
             int total_treatment_time = Integer.parseInt(calculated_schedule.getTotal_treatment_time());
             int updated_target_hour = total_treatment_time / 60;
             int updated_target_minute = total_treatment_time % 60;
-            calculated_schedule.setTotal_treatment_time(String.format("%02d", updated_target_hour)
+            calculated_schedule.setTotal_treatment_time(String.format("%02d%2$s", updated_target_hour,"h")
                     + ":"
-                    + String.format("%02d", updated_target_minute));
+                    + String.format("%02d%2$s", updated_target_minute,"m"));
         }
         update_Views(calculated_schedule);
 

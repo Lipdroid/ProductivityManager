@@ -2,10 +2,12 @@ package com.example.lipuhossain.productivitymanager.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.IBinder;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -247,7 +249,10 @@ public class GlobalUtils {
             @Override
             public void run() {
                 if (value <= 400) {
-                    int jumpTime = progress.getProgress();
+                    int jumpTime = 0;
+                    if(progress.getProgress() < value){
+                         jumpTime = progress.getProgress();
+                    }
 
                     while (jumpTime < value) {
                         try {
@@ -338,8 +343,8 @@ public class GlobalUtils {
         Double productivity = 0.0;
         try {
             productivity = ((Double.parseDouble(total_treatment_hours) / Double.parseDouble(actual_treatment_hours)) * 100);
-            int value = productivity.intValue();
-            return value + "";
+            //int value = productivity.intValue();
+            return String.format("%.2f",productivity);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -464,13 +469,13 @@ public class GlobalUtils {
                         productivity_txt = productivity.getText().toString().trim();
                     } else {
                         //show error
-                        showInfoDialog(context, "Error", "Please type your productivit for today.", "OK", null);
+                        showInfoDialog(context, "Error", "Please input hours otherwise type 0 if zero hours.", "OK", null);
                         return;
                     }
                     if (!hours.getText().toString().isEmpty()) {
                         hours_txt = hours.getText().toString().trim();
                     } else {
-                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK", null);
+                        showInfoDialog(context, "Error", "Please input hours otherwise type 0 if zero hours.", "OK", null);
                         return;
                     }
                     if (!minutes.getText().toString().isEmpty()) {
@@ -478,6 +483,14 @@ public class GlobalUtils {
                     }
                     dialogCallback.onAction1(productivity_txt, hours_txt, minutes_txt);
                 }
+
+
+                //remove the focus from the edittexts
+                IBinder token = hours.getWindowToken();
+                ( (InputMethodManager) context.getSystemService( Context.INPUT_METHOD_SERVICE ) ).hideSoftInputFromWindow( token, 0 );
+                IBinder token2 = minutes.getWindowToken();
+                ( (InputMethodManager) context.getSystemService( Context.INPUT_METHOD_SERVICE ) ).hideSoftInputFromWindow( token2, 0 );
+
                 infoDialog.dismiss();
             }
         });
@@ -491,6 +504,13 @@ public class GlobalUtils {
                 if (dialogCallback != null) {
                     dialogCallback.onAction2();
                 }
+
+                //remove the focus from the edittexts
+                IBinder token = hours.getWindowToken();
+                ( (InputMethodManager) context.getSystemService( Context.INPUT_METHOD_SERVICE ) ).hideSoftInputFromWindow( token, 0 );
+                IBinder token2 = minutes.getWindowToken();
+                ( (InputMethodManager) context.getSystemService( Context.INPUT_METHOD_SERVICE ) ).hideSoftInputFromWindow( token2, 0 );
+
                 infoDialog.dismiss();
             }
         });
@@ -532,7 +552,7 @@ public class GlobalUtils {
                     if (!hours.getText().toString().isEmpty()) {
                         hours_txt = hours.getText().toString().trim();
                     } else {
-                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK", null);
+                        showInfoDialog(context, "Error", "Please input hours otherwise type 0 if zero hours.", "OK", null);
                         return;
                     }
                     if (!minutes.getText().toString().isEmpty()) {
@@ -540,6 +560,12 @@ public class GlobalUtils {
                     }
                     dialogCallback.onAction3(0, hours_txt, minutes_txt);
                 }
+
+                //remove the focus from the edittexts
+                IBinder token = hours.getWindowToken();
+                ( (InputMethodManager) context.getSystemService( Context.INPUT_METHOD_SERVICE ) ).hideSoftInputFromWindow( token, 0 );
+                IBinder token2 = minutes.getWindowToken();
+                ( (InputMethodManager) context.getSystemService( Context.INPUT_METHOD_SERVICE ) ).hideSoftInputFromWindow( token2, 0 );
                 infoDialog.dismiss();
             }
         });
@@ -558,7 +584,7 @@ public class GlobalUtils {
                     if (!hours.getText().toString().isEmpty()) {
                         hours_txt = hours.getText().toString().trim();
                     } else {
-                        showInfoDialog(context, "Error", "Please type your total hour for today.", "OK", null);
+                        showInfoDialog(context, "Error", "Please input hours otherwise type 0 if zero hours.", "OK", null);
                         return;
                     }
                     if (!minutes.getText().toString().isEmpty()) {
@@ -566,6 +592,12 @@ public class GlobalUtils {
                     }
                     dialogCallback.onAction3(1, hours_txt, minutes_txt);
                 }
+
+                //remove the focus from the edittexts
+                IBinder token = hours.getWindowToken();
+                ( (InputMethodManager) context.getSystemService( Context.INPUT_METHOD_SERVICE ) ).hideSoftInputFromWindow( token, 0 );
+                IBinder token2 = minutes.getWindowToken();
+                ( (InputMethodManager) context.getSystemService( Context.INPUT_METHOD_SERVICE ) ).hideSoftInputFromWindow( token2, 0 );
                 infoDialog.dismiss();
             }
         });
@@ -578,7 +610,15 @@ public class GlobalUtils {
                 if (dialogCallback != null) {
                     dialogCallback.onAction2();
                 }
+
+                //remove the focus from the edittexts
+                IBinder token = hours.getWindowToken();
+                ( (InputMethodManager) context.getSystemService( Context.INPUT_METHOD_SERVICE ) ).hideSoftInputFromWindow( token, 0 );
+                IBinder token2 = minutes.getWindowToken();
+                ( (InputMethodManager) context.getSystemService( Context.INPUT_METHOD_SERVICE ) ).hideSoftInputFromWindow( token2, 0 );
+
                 infoDialog.dismiss();
+
             }
         });
 
@@ -791,7 +831,10 @@ public class GlobalUtils {
             if (updated_hour >= 12) {
                 if (updated_hour > 12)
                     updated_hour -= 12;
-                ampm = "PM";
+                if (intime.getHours() == 12)
+                    ampm = "AM";
+                else
+                    ampm = "PM";
             } else {
                 ampm = "AM";
             }
@@ -809,7 +852,10 @@ public class GlobalUtils {
             if (updated_hour >= 12) {
                 if (updated_hour > 12)
                     updated_hour -= 12;
-                ampm = "AM";
+                if (intime.getHours() == 12)
+                    ampm = "PM";
+                else
+                    ampm = "AM";
             } else {
                 ampm = "PM";
             }
@@ -830,13 +876,13 @@ public class GlobalUtils {
         Time t = new Time();
         if (intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")) {
             int total_minute = 0;
-            if(intime.getHours() == outtime.getHours()){
-                total_minute = (Integer.parseInt(outtime.getMinutes()+"") - Integer.parseInt(intime.getMinutes()+""));
+            if (intime.getHours() == outtime.getHours()) {
+                total_minute = (Integer.parseInt(outtime.getMinutes() + "") - Integer.parseInt(intime.getMinutes() + ""));
 
-            }else{
+            } else {
                 total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
 
-                if(intime.getHours() == 12 && outtime.getHours() != 12){
+                if (intime.getHours() == 12 && outtime.getHours() != 12) {
                     total_minute += 720;
                 }
             }
@@ -865,13 +911,13 @@ public class GlobalUtils {
         Time t = new Time();
         if (intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")) {
             int total_minute = 0;
-            if(intime.getHours() == outtime.getHours()){
-                total_minute = (Integer.parseInt(intime.getMinutes()+"") - Integer.parseInt(outtime.getMinutes()+""));
+            if (intime.getHours() == outtime.getHours()) {
+                total_minute = (Integer.parseInt(intime.getMinutes() + "") - Integer.parseInt(outtime.getMinutes() + ""));
 
-            }else{
+            } else {
                 total_minute = (Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")));
 
-                if(outtime.getHours() == 12 && intime.getHours() != 12){
+                if (outtime.getHours() == 12 && intime.getHours() != 12) {
                     total_minute += 720;
                 }
             }
@@ -901,13 +947,13 @@ public class GlobalUtils {
         Time t = new Time();
         if (intime.getAm_pm().equals("AM") && outtime.getAm_pm().equals("AM") || intime.getAm_pm().equals("PM") && outtime.getAm_pm().equals("PM")) {
             int total_minute = 0;
-            if(intime.getHours() == outtime.getHours()){
-                 total_minute = (Integer.parseInt(outtime.getMinutes()+"") - Integer.parseInt(intime.getMinutes()+""));
+            if (intime.getHours() == outtime.getHours()) {
+                total_minute = (Integer.parseInt(outtime.getMinutes() + "") - Integer.parseInt(intime.getMinutes() + ""));
 
-            }else{
+            } else {
                 total_minute = (Integer.parseInt(convertTimeInMinutes(outtime.getHours() + "", outtime.getMinutes() + "")) - Integer.parseInt(convertTimeInMinutes(intime.getHours() + "", intime.getMinutes() + "")));
 
-                if(intime.getHours() == 12 && outtime.getHours() != 12){
+                if (intime.getHours() == 12 && outtime.getHours() != 12) {
                     total_minute += 720;
                 }
             }
@@ -946,14 +992,14 @@ public class GlobalUtils {
         if (from_time.getAm_pm().equals("AM") && check_time.getAm_pm().equals("AM") || from_time.getAm_pm().equals("PM") && check_time.getAm_pm().equals("PM")) {
             //if same am/pm
             if (from_time.getHours() != 12 && check_time.getHours() == 12) {
-                if((from_time.getHours()+12) < check_time.getHours())
+                if ((from_time.getHours() + 12) < check_time.getHours())
                     return true;
 
             } else if (from_time.getHours() == 12 && check_time.getHours() != 12) {
-                if(from_time.getHours() < (check_time.getHours()+12))
+                if (from_time.getHours() < (check_time.getHours() + 12))
                     return true;
             } else {
-                 if (from_time.getHours() == check_time.getHours()) {
+                if (from_time.getHours() == check_time.getHours()) {
                     if (from_time.getMinutes() < check_time.getMinutes()) {
                         return true;
                     }
@@ -964,7 +1010,7 @@ public class GlobalUtils {
                 }
             }
         } else {
-            if(!(from_time.getAm_pm().equals("PM") && check_time.getAm_pm().equals("AM"))){
+            if (!(from_time.getAm_pm().equals("PM") && check_time.getAm_pm().equals("AM"))) {
 
                 if (check_time.getHours() != 12 && from_time.getHours() != 12) {
                     if ((check_time.getHours() + 12) > from_time.getHours()) {

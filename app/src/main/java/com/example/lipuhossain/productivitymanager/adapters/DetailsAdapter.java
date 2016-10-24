@@ -14,6 +14,8 @@ import com.example.lipuhossain.productivitymanager.R;
 import com.example.lipuhossain.productivitymanager.adapters.holder.HistoryHolder;
 import com.example.lipuhossain.productivitymanager.models.History;
 import com.example.lipuhossain.productivitymanager.models.Schedule;
+import com.example.lipuhossain.productivitymanager.models.Time;
+import com.example.lipuhossain.productivitymanager.utils.GlobalUtils;
 
 import java.util.ArrayList;
 
@@ -65,11 +67,17 @@ public class DetailsAdapter extends BaseAdapter {
         }
         Schedule data = mListData.get(position);
 
+        Time break_time = GlobalUtils.get_time(data.getBreak_time()+" N/A");
+        Time worked_time = GlobalUtils.get_time(data.getWorked_in_that_session()+" N/A");
 
         mHolder.tvDate.setText(data.getIn_time());
         mHolder.tvTarget.setText(data.getOut_time());
-        mHolder.tvActual.setText(data.getBreak_time());
-        mHolder.tvWorked.setText(data.getWorked_in_that_session().substring(0,5));
+        mHolder.tvActual.setText(String.format("%02d%2$s", break_time.getHours(),"h")
+                + ":"
+                + String.format("%02d%2$s", break_time.getMinutes(),"m"));
+        mHolder.tvWorked.setText(String.format("%02d%2$s", worked_time.getHours(),"h")
+                + ":"
+                + String.format("%02d%2$s", worked_time.getMinutes(),"m"));
 
 
         return convertView;

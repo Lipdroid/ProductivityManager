@@ -91,7 +91,7 @@
                             android:layout_marginRight="84px"
                             android:layout_marginTop="40px"
                             android:tag="51"
-                            android:text="Add/Minus Treatment Time"
+                            android:text="Add/Minus Patient Treatment Time"
                             android:textColor="@color/main_dark"
                             android:textSize="51px"
                             android:visibility="visible" />
