@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_help"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.lipuhossain.productivitymanager.HelpActivity">
+
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Help"
+            android:textColor="@color/common_white_1"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="11dp"
+            android:onClick="afterClickedBack"
+            android:padding="3dp"
+            android:src="@drawable/right_arrow" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tool_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:textSize="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="This is the ultimate App for PTs, PTAs, OTs, COTAs and any other users who work in an environment strictly controlled by productivity. You’ve all been there, wasting time calculating your productivity every day. How about from now on utilizing that time to treat patients!\n\nThis App is not a time clock manager, but rather productivity Manager in the sense that the creator recognized the fact that ALL facilities already have a time clock manager. Your time clock manager is the company time clock machine. So by copying the actual Clock In and Clock Out times manually to this App, you can be sure you get the same productivity percentage as your employer. Very simple!\n\nA little about how the App works. You can Clock In and Clock Out as many times as necessary. The App calculates the productivity on a continuous basis. This is important. The app updates the productivity percentage every time you clock out. So don’t be alarmed when the App presents a productivity number greater than 100%. This number will adjust and appear more realistic as you continue to clock in and out.\n\nYour focus should be on the Target Clock Out so as to be productive, this time will continue to adjust as you clock in and out.  Another nice feature of this App is the ability to Add/Minus your Total Patient Treatment Time at any time! We all know this will happen, a missed visit due to refusal, sickness, hospitalization etc. The App will re-calculate all the values as soon as you add/minus the Total Patient Treatment Time. Once a time is input it cannot be changed,however if correction needs to be made there is a Clear button and the times can be re-entered again.\n\nLastly the App keeps a history of all your data, how convenient. Now you can use this to verify your payroll as well!\n\nPlease don’t forget to rate the App and give feedback for future improvements." />
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

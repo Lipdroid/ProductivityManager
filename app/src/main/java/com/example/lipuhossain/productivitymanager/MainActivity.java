@@ -574,7 +574,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onActionHelp() {
-
+                Intent intent = new Intent(MainActivity.this,HelpActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -591,7 +592,7 @@ public class MainActivity extends AppCompatActivity {
         tv_actual_out_time.setVisibility(View.INVISIBLE);
         tv_actual_treatment_time.setVisibility(View.INVISIBLE);
         tv_actual_productivity.setVisibility(View.INVISIBLE);
-        GlobalUtils.resetProgress(progress_actual_productivity);
+       // GlobalUtils.resetProgress(progress_actual_productivity);
     }
 
 

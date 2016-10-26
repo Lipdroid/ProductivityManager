@@ -81,9 +81,9 @@
                     android:id="@+id/tv_target_treatment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="7:52"
+                    android:text="07h:52m"
                     android:textColor="@color/common_white_1"
-                    android:textSize="16dp" />
+                    android:textSize="14dp" />
 
 
             </LinearLayout>
@@ -105,9 +105,9 @@
                     android:id="@+id/tv_target_clock_out"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4:52 pm"
+                    android:text="04:52 pm"
                     android:textColor="@color/common_white_1"
-                    android:textSize="16dp" />
+                    android:textSize="14dp" />
 
 
             </LinearLayout>
@@ -178,9 +178,9 @@ android:layout_toRightOf="@+id/left"
                     android:id="@+id/tv_actual_treatment_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="7:52"
+                    android:text="07h:52m"
                     android:textColor="@color/common_white_1"
-                    android:textSize="16dp" />
+                    android:textSize="14dp" />
 
 
             </LinearLayout>
@@ -202,9 +202,9 @@ android:layout_toRightOf="@+id/left"
                     android:id="@+id/tv_actual_out_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4:52 pm"
+                    android:text="04:52 pm"
                     android:textColor="@color/common_white_1"
-                    android:textSize="16dp" />
+                    android:textSize="14dp" />
 
 
             </LinearLayout>

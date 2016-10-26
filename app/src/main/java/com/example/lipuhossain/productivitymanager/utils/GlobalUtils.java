@@ -250,7 +250,7 @@ public class GlobalUtils {
             public void run() {
                 //if (value <= 400) {
                     int jumpTime = 0;
-                    if(progress.getProgress() < value){
+                    if(progress.getProgress() < value && value<100){
                          jumpTime = progress.getProgress();
                     }
 
@@ -322,16 +322,19 @@ public class GlobalUtils {
             @Override
             public void run() {
                 int jumpTime = value;
-
-                while (jumpTime != 0) {
-                    try {
-                        sleep(10);
-                        jumpTime -= 1;
-                        progress.setProgress(jumpTime);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                if (value <= 100){
+                    while (jumpTime != 0) {
+                        try {
+                            sleep(10);
+                            jumpTime -= 1;
+                            progress.setProgress(jumpTime);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                     }
+            }else{
+                    progress.setProgress(0);
                 }
             }
         };

@@ -137,7 +137,7 @@ public class ScheduleAdapter extends BaseAdapter {
 
         } else {
             mHolder.header.setText(data.getSchedule_no());
-
+            mHolder.main_btn.setVisibility(View.VISIBLE);
         }
 
         initListener(position);
@@ -302,7 +302,7 @@ public class ScheduleAdapter extends BaseAdapter {
                 }
             } else {
                 //currently running an session
-                GlobalUtils.showInfoDialog(mContext, "Error", "Please clock out of previous sessions" +
+                GlobalUtils.showInfoDialog(mContext, "Error", "Please clock out of previous session " +
                         "before you clock in again", "OK", new SCDialogCallback() {
                     @Override
                     public void onAction1() {
