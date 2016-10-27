@@ -4,7 +4,7 @@
     android:id="@+id/activity_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.lipuhossain.productivitymanager.DetailsActivity">
+    tools:context="com.example.lipuhossain.productivitymanager.ben.example.lipuhossain.productivitymanager.DetailsActivity">
 
     <RelativeLayout
         android:id="@+id/rl_status"

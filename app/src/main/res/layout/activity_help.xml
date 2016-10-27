@@ -4,7 +4,7 @@
     android:id="@+id/activity_help"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.lipuhossain.productivitymanager.HelpActivity">
+    tools:context="com.example.lipuhossain.productivitymanager.ben.example.lipuhossain.productivitymanager.HelpActivity">
 
     <RelativeLayout
         android:id="@+id/tool_bar"
